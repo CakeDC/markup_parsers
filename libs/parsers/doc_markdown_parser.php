@@ -412,7 +412,7 @@ class DocMarkdownParser implements ParserInterface {
  * @return string Transformed text.
  */
 	protected function _doAutoLink($text) {
-		$wwwPattern = '/((https?:\/\/|www\.)[^\s]+)\s/';
+		$wwwPattern = '/((https?:\/\/|www\.)[^\s]+)(\s|$)/';
 		return preg_replace_callback($wwwPattern, array($this, '_autoLinkHelper'), $text);
 	}
 

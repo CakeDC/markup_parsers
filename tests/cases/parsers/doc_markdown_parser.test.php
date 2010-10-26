@@ -153,6 +153,23 @@ HTML;
 	}
 
 /**
+ * testAutoLinksInLists
+ *
+ * @return void
+ */
+	function testAutoLinksInLists() {
+		$text = <<<TEXT
+* [1] http://cakephp.lighthouseapp.com/projects/42648/changelog-1-3-5
+* [2] http://github.com/cakephp/cakephp/downloads 
+* [3] http://cakephp.lighthouseapp.com/projects/42648
+* [4] http://cakedc.com
+TEXT;
+		$result = $this->Parser->parse($text);
+		preg_match_all('/<a href=/', $result, $matches);
+		$this->assertIdentical(count($matches[0]), 4);
+	}
+
+/**
  * test inline links
  *
  * @return void
