@@ -8,7 +8,7 @@
  * @copyright Copyright 2010, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-App::import('Core', array('Helper', 'AppHelper'));
+App::import('Core', array('Helper', 'AppHelper', 'View'));
 App::import('Helper', array('MarkupParsers.Parser'));
 
 /**
@@ -37,7 +37,9 @@ class ParserHelperTest extends CakeTestCase {
 				'name' => 'Html',
 				'className' => 'MarkupParsers.Html')));
 
-		$this->Parser = new ParserHelper();
+		$controller = null;
+		$View = new View($controller);
+		$this->Parser = new ParserHelper($View);
 	}
 
 /**
