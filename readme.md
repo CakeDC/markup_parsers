@@ -68,9 +68,16 @@ To use any parser in your views just include the Parser helper into the $helpers
 
         public $helpers = array('MarkupParsers.Parser');
 
-And in your views
+And in your views you can either use `Parser::parse()` to get multipage parsed content:
 
-        echo $this->Parser->parse($string, 'my_parser'); // the second parameter can be left blank ad will use 'markdown' as default
+		$pages = $this->Parser->parse($string);
+		foreach ($pages as $page) :
+			echo $this->Html->tag('div', $page, array('class' => 'page'));
+		endforeach;
+
+Or `Parser::parseAsString()` to get a string with parsed content no matter if it is a multipage text:
+
+        echo $this->Parser->parseAsString($string, 'my_parser'); // the second parameter can be left blank ad will use 'markdown' as default
 
 
 ## Requirements ##
