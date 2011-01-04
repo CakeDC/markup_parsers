@@ -64,6 +64,27 @@ class ParserHelperTest extends CakeTestCase {
 		$string = '[b]Foobar[/b]';
 		$result = $this->Parser->parse($string, 'bbcode');
 		$this->assertEqual($result, array('<strong>Foobar</strong>'));
+
+		$string = 'Foobar page 1' . BbcodeParser::$pageSeparator . 'Foobar page 2';
+		$result = $this->Parser->parse($string, 'bbcode');
+		$this->assertEqual($result, array('Foobar page 1', 'Foobar page 2'));
 	}
 
+/**
+ * Test parseAsString method
+ *
+ * @return void
+ */
+	public function testParseAsString() {
+		$string = '[b]Foobar[/b]';
+		$result = $this->Parser->parseAsString($string, 'bbcode');
+		$this->assertEqual($result, '<strong>Foobar</strong>');
+
+		$string = 'Foobar page 1' . BbcodeParser::$pageSeparator . 'Foobar page 2';
+		$result = $this->Parser->parseAsString($string, 'bbcode');
+		$this->assertEqual($result, 'Foobar page 1Foobar page 2');
+
+		$result = $this->Parser->parseAsString($string, 'bbcode', ' / ');
+		$this->assertEqual($result, 'Foobar page 1 / Foobar page 2');
+	}
 }

@@ -18,7 +18,7 @@
 class ParserHelper extends AppHelper {
 
 /**
- * Parse text from some plain text format
+ * Parse text from some plain text format and returns an array of pages
  *
  * @param string $text Text for parsing
  * @param string $format Format type
@@ -41,6 +41,20 @@ class ParserHelper extends AppHelper {
 			}
 		}
 		return $parsed;
+	}
+
+/**
+ * Parse text and return a string with parsed content.
+ * Multi-page content will be returned as one string with pages joined with
+ * the separator passed in 3rd param
+ *
+ * @param string $text Text for parsing
+ * @param string $format Format type
+ * @param string $pageGlue Separator to use to join pages together [default: none]
+ * @return array Parsed text
+ */
+	public function parseAsString($text, $parser = 'markdown', $pageGlue = '') {
+		return implode($pageGlue, $this->parse($text, $parser));
 	}
 
 }
