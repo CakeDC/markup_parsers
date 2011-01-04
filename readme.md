@@ -34,14 +34,14 @@ This parser splits the input string in multiple pages using the `<!--Page Separa
 
 Every parser needs to be configured so they can be instantiated by the helper using the ParserRegistry class. To configure the parsers your are going to use in tour app put use the Configure class to list them.
 
-        Configure::write('Parsers.markdown' => array(
+        Configure::write('Parsers.markdown', array(
 			'name' => 'Markdown',
 			'className' => 'MarkupParsers.DocMarkdown'
 		));
 
 If you have your own parser implementation you can list it to into the array this way:
 
-        Configure::write('Parsers.my_parser' => array(
+        Configure::write('Parsers.my_parser', array(
 		    'name' => 'MyParser',
 		    'className' => 'MyPlugin.MyParser'
 	    ));
