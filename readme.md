@@ -53,7 +53,7 @@ A Parser class must be a Library implementing the `ParserInterface` shipped as a
 
 Here is a simple Parser example:
 
-	App::import('Lib', 'MarkupParsers.ParserInterface');
+	App::uses('ParserInterface', 'MarkupParsers.Lib');
 	class FoobarParser implements ParserInterface {
 		public function parse($string, $options = array()) {
 			return str_replace('foo', 'bar', $string);
