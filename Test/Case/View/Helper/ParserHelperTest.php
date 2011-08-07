@@ -29,7 +29,7 @@ class ParserHelperTest extends CakeTestCase {
 		Configure::write('Parsers', array(
 			'doc_markdown' => array(
 				'name' => 'Markdown',
-				'className' => 'MarkupParsers.DocMarkdown'),
+				'className' => 'MarkupParsers.Markdown'),
 			'bbcode' => array(
 				'name' => 'BBCode',
 				'className' => 'MarkupParsers.Bbcode'),

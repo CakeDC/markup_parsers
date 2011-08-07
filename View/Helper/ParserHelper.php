@@ -9,11 +9,13 @@
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
+App::uses('AppHelper', 'View\Helper');
+
 /**
  * Parser Helper
  *
- * @package markup_parsers
- * @subpackage markup_parsers.views.helpers
+ * @package MarkupParser
+ * @subpackage MarkupParser.View.Helper
  */
 class ParserHelper extends AppHelper {
 

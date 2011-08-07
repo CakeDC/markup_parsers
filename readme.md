@@ -36,7 +36,7 @@ Every parser needs to be configured so they can be instantiated by the helper us
 
         Configure::write('Parsers.markdown' => array(
 			'name' => 'Markdown',
-			'className' => 'MarkupParsers.DocMarkdown'
+			'className' => 'MarkupParsers.Markdown'
 		));
 
 If you have your own parser implementation you can list it to into the array this way:
