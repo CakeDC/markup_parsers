@@ -29,9 +29,8 @@ class ParserHelper extends AppHelper {
 	public function parse($text, $parser = 'markdown') {
 		$parsed = array($text);
 		try {
-			App::import('lib', 'MarkupParsers.ParserRegistry');
-			$Parser = ParserRegistry::getParser($parser);
-			$parsed = $Parser->parse($text);
+			App::uses('ParserRegistry', 'MarkupParsers.Lib');
+			$parsed = ParserRegistry::getParser($parser)->parse($text);
 			if (!is_array($parsed)) {
 				$parsed = array($parsed);
 			}

@@ -77,15 +77,8 @@ class ParserRegistry {
 		self::_init();
 
 		if (empty(self::$_parsers[$parser])) {
-			$class = self::$__availableParsers[$parser]['className'] . 'Parser';
-			App::import('Lib', $class);
-
-			$pieces = explode('.', $class);
-			if ($pieces == 2) {
-				$class = $pieces[0];
-			} else {
-				$class = $pieces[1];
-			}
+			list($class, $location) = self::$__availableParsers[$parser]['class'];
+			App::uses($class, $location);
 
 			if (!class_exists($class)) {
 				throw new Exception(__d('markup_parsers', 'Invalid Parser', true));

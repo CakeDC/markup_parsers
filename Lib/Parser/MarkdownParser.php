@@ -35,7 +35,7 @@
  * @package markup_parsers
  * @subpackage markup_parsers.libs
  */
-App::import('Lib', 'MarkupParsers.ParserInterface');
+App::uses('ParserInterface', 'MarkupParsers.Lib');
 class MarkdownParser implements ParserInterface {
 
 /**
