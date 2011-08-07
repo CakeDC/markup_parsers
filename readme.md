@@ -32,11 +32,11 @@ This parser splits the input string in multiple pages using the `<!--Page Separa
 
 ## The ParserRegistry Class##
 
-Every parser needs to be configured so they can be instantiated by the helper using the ParserRegistry class. To configure the parsers your are going to use in your app put use the Configure class to list them.
+Every parser needs to be configured so they can be instantiated by the helper using the ParserRegistry class. To configure the parsers your are going to use in tour app put use the Configure class to list them.
 
         Configure::write('Parsers.markdown' => array(
 			'name' => 'Markdown',
-			'className' => 'MarkupParsers.Markdown'
+			'className' => 'MarkupParsers.DocMarkdown'
 		));
 
 If you have your own parser implementation you can list it to into the array this way:
@@ -86,14 +86,14 @@ For more information about our Professional CakePHP Services please visit the [C
 
 ## License ##
 
-Copyright 2009-2010, [Cake Development Corporation](http://cakedc.com)
+Copyright 2009-2011, [Cake Development Corporation](http://cakedc.com)
 
 Licensed under [The MIT License](http://www.opensource.org/licenses/mit-license.php)<br/>
 Redistributions of files must retain the above copyright notice.
 
 ## Copyright ###
 
-Copyright 2009-2010<br/>
+Copyright 2009-2011<br/>
 [Cake Development Corporation](http://cakedc.com)<br/>
 1785 E. Sahara Avenue, Suite 490-423<br/>
 Las Vegas, Nevada 89104<br/>
