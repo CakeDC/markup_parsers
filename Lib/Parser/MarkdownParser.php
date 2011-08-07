@@ -10,10 +10,9 @@
  */
 
 /**
- * DocMarkdown is a simple Markdown Parser.  It provides a set of syntax
- * parsing for documentation blocks.  It does not support the full markdown feature set
- * and implements several additional elements that have extra utility in documentation
- * for PHP projects.
+ * This Markdown Parser provides a set of syntax parsing for documentation blocks.
+ * It does not support the full markdown feature set and implements several additional
+ * elements that have extra utility in documentation for PHP projects.
  *
  * ### Unsuported syntax items:
  *
@@ -37,7 +36,7 @@
  * @subpackage markup_parsers.libs
  */
 App::import('Lib', 'MarkupParsers.ParserInterface');
-class DocMarkdownParser implements ParserInterface {
+class MarkdownParser implements ParserInterface {
 
 /**
  * The text being parsed.
@@ -444,7 +443,7 @@ class DocMarkdownParser implements ParserInterface {
  * Helper function for replacing of inline links
  *
  * @return string Text
- * @see DocMarkdown::_doInlineLink()
+ * @see Markdown::_doInlineLink()
  */
 	protected function _inlineLinkHelper($matches) {
 		$title = null;
