@@ -42,5 +42,4 @@ class ParserHelper extends AppHelper {
 		}
 		return $parsed;
 	}
-
 }
