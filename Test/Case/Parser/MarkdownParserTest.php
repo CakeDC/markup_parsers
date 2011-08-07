@@ -8,7 +8,7 @@
  * @copyright Copyright 2010, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-App::import('Lib', array('MarkupParsers.DocMarkdownParser'));
+App::import('Lib', array('MarkupParsers.MarkdownParser'));
 
 /**
  * HtmlParser test case
@@ -16,7 +16,7 @@ App::import('Lib', array('MarkupParsers.DocMarkdownParser'));
  * @package markup_parsers
  * @subpackage markup_parsers.tests.cases.libs
  */
-class DocMarkdownParserTest extends CakeTestCase {
+class MarkdownParserTest extends CakeTestCase {
 
 /**
  * setUp method
@@ -24,7 +24,7 @@ class DocMarkdownParserTest extends CakeTestCase {
  * @return void
  */
 	public function setup() {
-		$this->Parser = new DocMarkdownParser();
+		$this->Parser = new MarkdownParser();
 	}
 
 /**
