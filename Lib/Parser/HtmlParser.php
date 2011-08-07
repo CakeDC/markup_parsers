@@ -9,8 +9,8 @@
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-App::import('Lib', 'MarkupParsers.ParserInterface');
-App::import('Core', 'Sanitize');
+App::uses('ParserInterface', 'MarkupParsers.Lib');
+App::uses('Sanitize', 'Utility');
 
 /**
  * Html Parser
@@ -19,6 +19,7 @@ App::import('Core', 'Sanitize');
  * @subpackage markup_parsers.libs
  */
 class HtmlParser implements ParserInterface {
+
 /**
  * Page separator pattern
  * 
