@@ -32,7 +32,7 @@ This parser splits the input string in multiple pages using the `<!--Page Separa
 
 ## The ParserRegistry Class##
 
-Every parser needs to be configured so they can be instantiated by the helper using the ParserRegistry class. To configure the parsers your are going to use in tour app put use the Configure class to list them.
+Every parser needs to be configured so they can be instantiated by the helper using the ParserRegistry class. To configure the parsers your are going to use in your app put use the Configure class to list them.
 
         Configure::write('Parsers.markdown' => array(
 			'name' => 'Markdown',
