@@ -36,14 +36,14 @@ Every parser needs to be configured so they can be instantiated by the helper us
 
         Configure::write('Parsers.markdown' => array(
 			'name' => 'Markdown',
-			'className' => 'MarkupParsers.Markdown'
+			'class' => array('MarkdownParser', 'MarkupParsers.Parser'), 
 		));
 
 If you have your own parser implementation you can list it to into the array this way:
 
         Configure::write('Parsers.my_parser' => array(
 		    'name' => 'MyParser',
-		    'className' => 'MyPlugin.MyParser'
+		    'class' => array('MyParser', 'MyPlugin.Parser'),
 	    ));
 
 ## Writing a parser ##
