@@ -1,5 +1,7 @@
 # Markup Parsers Plugin for CakePHP #
 
+Version 1.1
+
 This plugin offers a solution for working with different type of markup for you application. It offers both some markup parser implementations and a parser factory responsible for registering available parser classes and returning instances of them.
 
 It provides three different markup implementations:
@@ -100,7 +102,7 @@ Redistributions of files must retain the above copyright notice.
 
 ## Copyright ###
 
-Copyright 2009-2010<br/>
+Copyright 2009-2011<br/>
 [Cake Development Corporation](http://cakedc.com)<br/>
 1785 E. Sahara Avenue, Suite 490-423<br/>
 Las Vegas, Nevada 89104<br/>
