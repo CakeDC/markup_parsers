@@ -8,7 +8,8 @@
  * @copyright Copyright 2010-2011, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-App::import('Lib', array('MarkupParsers.MarkdownParser'));
+
+App::uses('MarkdownParser', 'MarkupParsers.Parser');
 
 /**
  * HtmlParser test case
@@ -219,7 +220,7 @@ TEXT;
 <h3>heading 3</h3>
 <h4>heading 4</h4>
 <h5>Imbalanced</h5>
-<h6>There is no heading 8</h6>
+<h6>## There is no heading 8</h6>
 HTML;
 		$this->assertEqual($result, $expected);
 	}
@@ -704,6 +705,37 @@ HTML;
 		$this->assertEqual($result, $expected);
 	}
 
+/**
+ * Test headings embedded in code blocks
+ *
+ * @return void
+ */
+	function testHeadingsInCodeBlocks() {
+		$text = <<<TEXT
+this is some
 
+	##
+	## This should not render as a heading
+	function test() {
+		echo '<test>';
+	}
+
+more text
+TEXT;
+		$expected = <<<HTML
+<p>this is some</p>
+
+<pre><code>##
+## This should not render as a heading
+function test() {
+    echo '&lt;test&gt;';
+}</code></pre>
+
+<p>more text</p>
+HTML;
+
+		$result = $this->Parser->parse($text);
+		$this->assertEqual($result, $expected);
+	}
 }
 ?>

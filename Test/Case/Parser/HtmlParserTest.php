@@ -8,7 +8,8 @@
  * @copyright Copyright 2010-2011, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-App::import('Lib', array('MarkupParsers.HtmlParser'));
+
+App::uses('HtmlParser', 'MarkupParsers.Parser');
 
 /**
  * HtmlParser test case

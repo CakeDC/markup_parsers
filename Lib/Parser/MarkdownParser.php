@@ -9,6 +9,8 @@
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
+App::uses('ParserInterface', 'MarkupParsers.Lib');
+
 /**
  * This Markdown Parser provides a set of syntax parsing for documentation blocks.
  * It does not support the full markdown feature set and implements several additional
@@ -35,7 +37,6 @@
  * @package markup_parsers
  * @subpackage markup_parsers.libs
  */
-App::uses('ParserInterface', 'MarkupParsers.Lib');
 class MarkdownParser implements ParserInterface {
 
 /**
@@ -168,8 +169,8 @@ class MarkdownParser implements ParserInterface {
  */
 	protected function _doCodeBlocksIndented($text) {
 		$codePattern = sprintf(
-			'/(\n\n|\A)((?:[ ]{%s}.*\n+)+)((?=[ ]{0,%s}|\Z))/',
-			$this->spacesPerTab,$this->spacesPerTab
+			'/(\n\n|\A)((?: {%s}.*\n+)+)((?= {0,%s}|\Z))/',
+			$this->spacesPerTab, $this->spacesPerTab
 		);
 		$this->_indentedCode = true;
 		$return = preg_replace_callback($codePattern, array($this, '_codeBlockHelper'), $text);
@@ -208,7 +209,7 @@ class MarkdownParser implements ParserInterface {
  * @return string Transformed text
  */
 	protected function _doHeaders($text) {
-		$headingPattern = '/(#+)\s([^#\n]+)(#*)/';
+		$headingPattern = '/^(#{1,6})[ \t]*(.+?)[ \t]*(#*)$/m';
 		return preg_replace_callback($headingPattern, array($this, '_headingHelper'), $text);
 	}
 
@@ -220,9 +221,6 @@ class MarkdownParser implements ParserInterface {
  */
 	protected function _headingHelper($matches) {
 		$count = strlen($matches[1]);
-		if ($count > 6) {
-			$count = 6;
-		}
 		return $this->_makePlaceHolder(sprintf('<h%s>%s</h%s>', $count, trim($matches[2]), $count));
 	}
 
