@@ -736,6 +736,32 @@ HTML;
 
 		$result = $this->Parser->parse($text);
 		$this->assertEqual($result, $expected);
+
+		$text = <<<TEXT
+Text
+
+	Code 1
+
+Some [linked](http://cakephp.org) text
+
+	Code 2
+
+Last Text
+TEXT;
+		$expected = <<<HTML
+<p>Text</p>
+
+<pre><code>Code 1</code></pre>
+
+<p>Some <a href="http://cakephp.org">linked</a> text</p>
+
+<pre><code>Code 2</code></pre>
+
+<p>Last Text</p>
+HTML;
+
+		$result = $this->Parser->parse($text);
+		$this->assertEqual($result, $expected);
 	}
 }
 ?>
