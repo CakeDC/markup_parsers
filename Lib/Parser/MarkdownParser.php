@@ -141,11 +141,11 @@ class MarkdownParser implements ParserInterface {
  * @return string Transformed text.
  */
 	protected function _runBlocks($text) {
+		$text = $this->_doCodeBlocksDelimited($text);
+		$text = $this->_doCodeBlocksIndented($text);
 		$text = $this->_doHeaders($text);
 		$text = $this->_doHorizontalRule($text);
 		$text = $this->_doLists($text);
-		$text = $this->_doCodeBlocksDelimited($text);
-		$text = $this->_doCodeBlocksIndented($text);
 		$text = $this->_doParagraphs($text);
 		return $text;
 	}
