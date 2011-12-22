@@ -763,5 +763,48 @@ HTML;
 		$result = $this->Parser->parse($text);
 		$this->assertEqual($result, $expected);
 	}
+
+	public function testFunky() {
+		$text = <<<TEXT
+Text
+
+	Code 1
+
+Text
+
+[Link](http://google.com).
+
+Text
+
+* Bullet 1
+* Bullet 2
+* Bullet 3
+
+Text
+TEXT;
+		$expected = <<<HTML
+<p>Text</p>
+
+<pre><code>Code 1</code></pre>
+
+<p>Text</p>
+
+<p><a href="http://google.com">Link</a></p>
+
+<p>Text</p>
+
+<ul>
+<li>Bullet 1</li>
+<li>Bullet 2</li>
+<li>Bullet 3</li>
+</ul>
+
+<p>Text</p>
+HTML;
+
+		$result = $this->Parser->parse($text);
+		$this->assertEqual($result, $expected);
+	}
+
 }
 ?>
