@@ -8,7 +8,11 @@
  * @copyright Copyright 2010-2011, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-App::import('Core', array('Helper', 'AppHelper', 'View'));
+
+App::uses('View', 'View'); 
+App::uses('Helper', 'View/Helper');
+App::uses('AppHelper', 'View/Helper');
+
 App::import('Helper', array('MarkupParsers.Parser'));
 
 /**
@@ -27,7 +31,7 @@ class ParserHelperTest extends CakeTestCase {
  */
 	function setup() {
 		Configure::write('Parsers', array(
-			'doc_markdown' => array(
+			'markdown' => array(
 				'name' => 'Markdown',
 				'className' => 'MarkupParsers.Markdown'),
 			'bbcode' => array(
@@ -60,12 +64,17 @@ class ParserHelperTest extends CakeTestCase {
  */
 	public function testParse() {
 		$string = '# Foobar';
-		$result = $this->Parser->parse($string, 'doc_markdown');
+		$result = $this->Parser->parse($string, 'markdown');
 		$this->assertEqual($result, array('<h1>Foobar</h1>'));
 
 		$string = '[b]Foobar[/b]';
 		$result = $this->Parser->parse($string, 'bbcode');
 		$this->assertEqual($result, array('<strong>Foobar</strong>'));
+		
+		$string = '<b>Foobar</b><!-- Page separator --><b>Barfoo</b>';
+		$result = $this->Parser->parse($string, 'html');
+		
+		$this->assertEqual($result, array('<b>Foobar</b>', '<b>Barfoo</b>'));
 	}
 
 }
