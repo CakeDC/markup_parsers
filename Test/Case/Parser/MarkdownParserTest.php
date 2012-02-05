@@ -811,12 +811,17 @@ HTML;
 		$testText = <<<TEXT
 # test #
 
+    Code
+
  * One
  * Two
  * Three
 TEXT;
 		$expected = <<<HTML
 <h1>test</h1>
+
+<pre><code>Code
+</code></pre>
 
 <ul>
 <li>One</li>

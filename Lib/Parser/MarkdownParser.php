@@ -120,12 +120,12 @@ class MarkdownParser implements ParserInterface {
 		
 		if ($options['engine'] == 'markdown_extra') {
 			App::import('Vendor', 'MarkupParsers.markdown/markdown');
-			$Markdown = new Markdown_Parser;
+			$Markdown = new MarkdownExtra_Parser;
 			return trim($Markdown->transform($text));
 			
 		} elseif ($options['engine'] == 'markdown') {
 			App::import('Vendor', 'MarkupParsers.markdown/markdown');
-			$Markdown = new MarkdownExtra_Parser;
+			$Markdown = new Markdown_Parser;
 			return trim($Markdown->transform($text));
 		}
 		
