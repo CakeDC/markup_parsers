@@ -104,6 +104,9 @@ class MarkdownParser implements ParserInterface {
  * - stripHtml - remove any HTML before parsing.
  * - engine: default, markdown, markdown_extra
  * 
+ * IDEAS
+ * - elements: allow further elemens like video, latex, ... (use registerElement to register new stuff)
+ *
  * @param string $text Text to be converted
  * @param array $options Array of options for converting
  * @return string Parsed HTML
