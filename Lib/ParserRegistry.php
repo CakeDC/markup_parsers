@@ -77,7 +77,7 @@ class ParserRegistry {
 		self::_init();
 
 		if (empty(self::$_parsers[$parser])) {
-			list($class, $location) = self::$__availableParsers[$parser]['class'];
+			list($class, $location) = self::$__availableParsers[$parser];
 			App::uses($class, $location);
 
 			if (!class_exists($class)) {
