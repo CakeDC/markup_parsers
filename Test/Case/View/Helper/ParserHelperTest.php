@@ -8,8 +8,9 @@
  * @copyright Copyright 2010-2012, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-App::import('Core', array('Helper', 'AppHelper', 'View'));
-App::import('Helper', array('MarkupParsers.Parser'));
+App::uses('View', 'View');
+App::uses('AppHelper', 'View/Helper');
+App::uses('ParserHelper', 'MarkupParsers.View/Helper');
 
 /**
  * Parser helper test case
@@ -28,14 +29,14 @@ class ParserHelperTest extends CakeTestCase {
 	function setup() {
 		Configure::write('Parsers', array(
 			'doc_markdown' => array(
-				'name' => 'Markdown',
-				'className' => 'MarkupParsers.Markdown'),
+				'MarkdownParser',
+				'MarkupParsers.Lib/Parser'),
 			'bbcode' => array(
-				'name' => 'BBCode',
-				'className' => 'MarkupParsers.Bbcode'),
+				'BbcodeParser',
+				'MarkupParsers.Lib/Parser'),
 			'html' => array(
-				'name' => 'Html',
-				'className' => 'MarkupParsers.Html')));
+				'HtmlParser',
+				'MarkupParsers.Lib/Parser')));
 
 		$controller = null;
 		$View = new View($controller);
