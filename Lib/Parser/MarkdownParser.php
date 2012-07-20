@@ -541,6 +541,10 @@ class MarkdownParser implements ParserInterface {
 	protected function _makePlaceHolder($text) {
 		$count = count($this->_placeHolders);
 		$marker = 'B0x1A' . $count;
+		while (array_key_exists($marker, $this->_placeHolders)) {
+			$count++;
+			$marker = 'B0x1A' . $count;
+		}
 		$this->_placeHolders[$marker] = $text;
 		return $marker;
 	}

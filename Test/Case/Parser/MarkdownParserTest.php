@@ -790,7 +790,7 @@ TEXT;
 
 <p>Text</p>
 
-<p><a href="http://google.com">Link</a></p>
+<p><a href="http://google.com">Link</a>.</p>
 
 <p>Text</p>
 
@@ -836,6 +836,8 @@ HTML;
 		$this->assertTextEquals($result, $expected);
 	}
 
-
+	public function assertTextEquals($string, $expected) {
+		return $this->assertEquals($string, $expected);
+	}
 }
 

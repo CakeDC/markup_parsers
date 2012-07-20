@@ -98,9 +98,12 @@ And some [google-link][1].
 TEXT;
 		
 		$res = $this->Markdownify->parseString($html);
-		debug($res);
 		ob_flush();
-		$this->assertTextEquals($expected, trim($res));
+		$this->assertEquals($expected, trim($res));
 	}
 
+	public function assertTextEquals($string, $expected) {
+		return $this->assertEquals($string, $expected);
+	}
+	
 }
