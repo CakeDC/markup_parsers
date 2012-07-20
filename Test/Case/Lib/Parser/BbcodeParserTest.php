@@ -93,5 +93,9 @@ HTML;
 		$this->assertEqual($result, $expected);
 	}
 
+	public function assertTextEquals($string, $expected) {
+		return $this->assertEquals($string, $expected);
+	}
+	
 }
-?>
+
