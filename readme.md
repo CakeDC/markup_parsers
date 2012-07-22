@@ -76,7 +76,7 @@ And in your views
 ## Requirements ##
 
 * PHP version: PHP 5.2+
-* CakePHP version: Cakephp 1.3 Stable
+* CakePHP version: Cakephp 2.x Stable
 
 ## Support ##
 

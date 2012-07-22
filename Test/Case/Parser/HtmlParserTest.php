@@ -44,7 +44,7 @@ class HtmlParserTest extends CakeTestCase {
 	public function testParse() {
 		$string = 'This is some <strong>Html text</strong>';
 		$result = $this->Parser->parse($string);
-		$this->assertEqual($result, array($string));
+		$this->assertEquals(array($string), $result);
 
 		$string = <<<HTML
 <h1>This is a first page</h1>
@@ -61,7 +61,7 @@ HTML;
 		$expected = array(
 			"<h1>This is a first page</h1><p>With text and </p>",
 			"<h1>This is a second page</h1><p>With other things</p>");
-		$this->assertEqual($result, $expected);
+		$this->assertEquals($expected, $result);
 	}
 
 /**
@@ -77,7 +77,7 @@ HTML;
 			. highlight_string('<?php echo "Hello world!"; ?>', true)
 			. highlight_string('<?php echo "Hello world again!"; ?>', true)
 			. '<p>And other things</p>');
-		$this->assertEqual($result, $expected);
+		$this->assertEquals($expected, $result);
 
 		$result = $this->Parser->parse($string, array('highlight_code' => false));
 
@@ -87,7 +87,7 @@ HTML;
 			'<code>&lt;?php&nbsp;echo&nbsp;&quot;Hello&nbsp;world&nbsp;again!&quot;;&nbsp;?&gt;</code>'.
 			'<p>And other things</p>'
 		);
-		$this->assertEqual($result, $expected);
+		$this->assertEquals($expected, $result);
 	}
 
 }

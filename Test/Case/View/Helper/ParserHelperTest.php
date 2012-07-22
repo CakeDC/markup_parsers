@@ -65,16 +65,16 @@ class ParserHelperTest extends CakeTestCase {
 	public function testParse() {
 		$string = '# Foobar';
 		$result = $this->Parser->parse($string, 'markdown');
-		$this->assertEqual($result, array('<h1>Foobar</h1>'));
+		$this->assertEquals(array('<h1>Foobar</h1>'), $result);
 
 		$string = '[b]Foobar[/b]';
 		$result = $this->Parser->parse($string, 'bbcode');
-		$this->assertEqual($result, array('<strong>Foobar</strong>'));
+		$this->assertEquals(array('<strong>Foobar</strong>'), $result);
 
 		$string = '<b>Foobar</b><!-- Page separator --><b>Barfoo</b>';
 		$result = $this->Parser->parse($string, 'html');
 
-		$this->assertEqual($result, array('<b>Foobar</b>', '<b>Barfoo</b>'));
+		$this->assertEquals(array('<b>Foobar</b>', '<b>Barfoo</b>'), $result);
 	}
 
 }
