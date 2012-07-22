@@ -522,7 +522,6 @@ class MarkdownParser implements ParserInterface {
  * @return string Text with placeholders replaced.
  */
 	protected function _replacePlaceHolders($text) {
-		debug(returns($this->_placeHolders));
 		foreach ($this->_placeHolders as $marker => $replacement) {
 			$replaced = 0;
 			$text = str_replace($marker, $replacement, $text, $replaced);
