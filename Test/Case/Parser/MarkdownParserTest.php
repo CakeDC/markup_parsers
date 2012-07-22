@@ -124,7 +124,7 @@ HTML;
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <code>code text` &lt; > &amp; normal `code</code> normal.</p>';
 		$this->assertTextEquals($result, $expected);
-		
+
 		$text = 'Normal text ``code text some_variable_here_code text`` normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <code>code text some_variable_here_code text</code> normal.</p>';
@@ -161,7 +161,7 @@ HTML;
 	function testAutoLinksInLists() {
 		$text = <<<TEXT
 * [1] http://cakephp.lighthouseapp.com/projects/42648/changelog-1-3-5
-* [2] http://github.com/cakephp/cakephp/downloads 
+* [2] http://github.com/cakephp/cakephp/downloads
 * [3] http://cakephp.lighthouseapp.com/projects/42648
 * [4] http://cakedc.com
 TEXT;
@@ -412,9 +412,9 @@ HTML;
 		$text = <<<TEXT
 this is some
 
-    function test() {
-    	echo '<test>';
-    }
+	function test() {
+		echo '<test>';
+	}
 
 more text
 TEXT;
@@ -433,11 +433,11 @@ HTML;
 		$text = <<<TEXT
 this is some
 
-    function test() {
-    	echo '<test>';
-    }
-    
-    \$foo->bar();
+	function test() {
+		echo '<test>';
+	}
+
+	\$foo->bar();
 
 more text
 TEXT;
@@ -520,8 +520,8 @@ HTML;
 		$text = <<<TEXT
 ### Attributes:
 
- - `empty` - If true, the empty select option is shown.  If a string, 
-    that string is displayed as the empty element.
+ - `empty` - If true, the empty select option is shown.  If a string,
+	that string is displayed as the empty element.
  - this is another line
 TEXT;
 
@@ -529,7 +529,7 @@ TEXT;
 <h3>Attributes:</h3>
 
 <ul>
-<li><code>empty</code> - If true, the empty select option is shown.  If a string, 
+<li><code>empty</code> - If true, the empty select option is shown.  If a string,
 that string is displayed as the empty element.</li>
 <li>this is another line</li>
 </ul>
@@ -605,9 +605,9 @@ HTML;
 Some text here.
 
  - Line 1
-    - Indented 1
-    - Indented 2
-    - Indented 3
+	- Indented 1
+	- Indented 2
+	- Indented 3
  - Line 2
  - Line 3
 
@@ -637,9 +637,9 @@ HTML;
 Some text here.
 
  - Line 1
-    - Indented 1
-    - Indented 2
-        - Indented 3
+	- Indented 1
+	- Indented 2
+		- Indented 3
  - Line 2
  - Line 3
 
@@ -678,8 +678,8 @@ HTML;
 Some text here.
 
  - Line 1
-    1. Indented 1
-    2. Indented 2
+	1. Indented 1
+	2. Indented 2
  - Line 2
  - Line 3
 
@@ -764,7 +764,6 @@ HTML;
 		$this->assertTextEquals($result, $expected);
 	}
 
-	// doesnt work - bullet list is not correctly transformed
 	public function testFunky() {
 		$text = <<<TEXT
 Text
@@ -811,7 +810,7 @@ HTML;
 		$testText = <<<TEXT
 # test #
 
-    Code
+	Code
 
  * One
  * Two
@@ -831,13 +830,11 @@ TEXT;
 HTML;
 		$result = $this->Parser->parse($testText, array('engine'=>'markdown'));
 		$this->assertTextEquals($result, $expected);
-		
+
 		$result = $this->Parser->parse($testText, array('engine'=>'markdown_extra'));
 		$this->assertTextEquals($result, $expected);
 	}
 
-	public function assertTextEquals($string, $expected) {
-		return $this->assertEquals($string, $expected);
-	}
+
 }
 

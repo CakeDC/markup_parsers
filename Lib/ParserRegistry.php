@@ -11,9 +11,9 @@
 
 /**
  * Parser Registry. A factory to return parser instances from available parsers listed using the Configure class
- * 
+ *
  * To setup a new parser use
- * 
+ *
  *		Configure::write('Parsers.my_parser' => array(
  *			'name' => 'MyParser',
  *			'className' => 'MyPlugin.MyParser'
@@ -55,7 +55,7 @@ class ParserRegistry {
 				'name' => 'Html',
 				'className' => 'MarkupParsers.Html')
 		);
-		
+
 		if (empty(self::$__availableParsers)) {
 			self::$__availableParsers = array_merge($defaults, (array) Configure::read('Parsers'));
 		}
@@ -82,13 +82,15 @@ class ParserRegistry {
  *
  * @param string parser key
  * @return object Parser instance
- * 
+ *
  */
 	public static function getParser($parser = '') {
 		self::_init();
 
 		if (empty(self::$_parsers[$parser])) {
-			list($class, $location) = self::$__availableParsers[$parser];
+			list($plugin, $class) = pluginSplit(self::$__availableParsers[$parser]['className']);
+			$location = (!empty($plugin) ? $plugin . '.' : '' ) . 'Parser';
+			$class .= 'Parser';
 			App::uses($class, $location);
 
 			if (!class_exists($class)) {

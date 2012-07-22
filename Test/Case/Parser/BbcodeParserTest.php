@@ -58,11 +58,11 @@ With an URL to <a href="http://www.cakedc.com">cakedc.com</a>.<br />
 <del>Strike through text</del>
 HTML;
 		$result = $this->Parser->parse($testText);
-		$this->assertEqual($result, $expected);
+		$this->assertEquals($expected, $result);
 	}
 
 /**
- * test Parse BBCode with a not closed tag 
+ * test Parse BBCode with a not closed tag
  *
  * @return void
  * @access public
@@ -77,8 +77,8 @@ TEXT;
 This is an [i]incorrect[/i BBCode markup.
 HTML;
 		$result = $this->Parser->parse($testText);
-		$this->assertEqual($result, $expected);
-		
+		$this->assertEquals($expected, $result);
+
 		$testText = <<<TEXT
 [h1]Test[/h1]
 A first [i]italic text[/i]
@@ -90,12 +90,8 @@ A first <span style="font-style:italic;">italic text</span>
 This is an <span style="font-style:italic;">incorrect[/i BBCode [i]markup</span>.
 HTML;
 		$result = $this->Parser->parse($testText);
-		$this->assertEqual($result, $expected);
+		$this->assertEquals($expected, $result);
 	}
 
-	public function assertTextEquals($string, $expected) {
-		return $this->assertEquals($string, $expected);
-	}
-	
 }
 

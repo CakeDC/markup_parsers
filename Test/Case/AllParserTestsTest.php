@@ -12,7 +12,7 @@ class AllHelperTestsTest extends PHPUnit_Framework_TestSuite {
 	public static function suite() {
 		$Suite = new CakeTestSuite('All Parser tests');
 		$path = dirname(__FILE__);
-		$Suite->addTestDirectory($path . DS . 'Lib' . DS . 'Parser');
+		$Suite->addTestDirectory($path . DS . 'Parser');
 		return $Suite;
 	}
 }
