@@ -764,8 +764,7 @@ HTML;
 		$this->assertTextEquals($result, $expected);
 	}
 
-	// doesnt work - bullet list is not correctly transformed
-	public function _testFunky() {
+	public function testFunky() {
 		$text = <<<TEXT
 Text
 
@@ -804,8 +803,6 @@ TEXT;
 HTML;
 
 		$result = $this->Parser->parse($text);
-		debug($result);
-		debug($expected); ob_flush();
 		$this->assertTextEquals($result, $expected);
 	}
 
