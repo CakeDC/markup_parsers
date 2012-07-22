@@ -22,7 +22,7 @@ class HtmlParser implements ParserInterface {
 
 /**
  * Page separator pattern
- * 
+ *
  * @var string
  */
 	public static $pageSeparator = '<!-- Page separator -->';
@@ -30,7 +30,7 @@ class HtmlParser implements ParserInterface {
 /**
  * Whether or not the highlight_string() PHP function must be used for the code
  * Used temporarily to persist the value during callback calls
- * 
+ *
  * @var boolean
  */
 	private $__phpHighlightEnabled = true;
@@ -38,7 +38,7 @@ class HtmlParser implements ParserInterface {
 /**
  * Parse method
  * Split the data across multiple pages
- * 
+ *
  * @param string $string String to parse
  * @param array $options Valid keys are:
  * 	- highlight_code: whether or not the highlight_string() PHP function must be used for the code
@@ -47,7 +47,7 @@ class HtmlParser implements ParserInterface {
 	public function parse($string, $options = array()) {
 		$_defaults = array('highlight_code' => true);
 		$options = array_merge($_defaults, $options);
-		
+
 		$this->__phpHighlightEnabled = $options['highlight_code'];
 		$data = explode(self::$pageSeparator, $string);
 		foreach ($data as &$text) {
@@ -59,7 +59,7 @@ class HtmlParser implements ParserInterface {
 
 /**
  * Code highlighting method - must be called from a preg_replace_callback
- * 
+ *
  * @param array $text Matched code to highlight
  * @return string Formated text
  */

@@ -80,7 +80,7 @@ HTML;
 		$this->assertEqual($result, $expected);
 
 		$result = $this->Parser->parse($string, array('highlight_code' => false));
-		
+
 		$expected = array(
 			'<h1>This is a code page</h1>'.
 			'<code>&lt;?php&nbsp;echo&nbsp;&quot;Hello&nbsp;world!&quot;;&nbsp;?&gt;</code>'.
@@ -90,8 +90,4 @@ HTML;
 		$this->assertEqual($result, $expected);
 	}
 
-	public function assertTextEquals($string, $expected) {
-		return $this->assertEquals($string, $expected);
-	}
-	
 }

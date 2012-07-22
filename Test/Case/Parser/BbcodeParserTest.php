@@ -62,7 +62,7 @@ HTML;
 	}
 
 /**
- * test Parse BBCode with a not closed tag 
+ * test Parse BBCode with a not closed tag
  *
  * @return void
  * @access public
@@ -78,7 +78,7 @@ This is an [i]incorrect[/i BBCode markup.
 HTML;
 		$result = $this->Parser->parse($testText);
 		$this->assertEqual($result, $expected);
-		
+
 		$testText = <<<TEXT
 [h1]Test[/h1]
 A first [i]italic text[/i]
@@ -93,9 +93,5 @@ HTML;
 		$this->assertEqual($result, $expected);
 	}
 
-	public function assertTextEquals($string, $expected) {
-		return $this->assertEquals($string, $expected);
-	}
-	
 }
 

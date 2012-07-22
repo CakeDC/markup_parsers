@@ -9,7 +9,7 @@
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-App::uses('View', 'View'); 
+App::uses('View', 'View');
 App::uses('Helper', 'View/Helper');
 App::uses('AppHelper', 'View/Helper');
 
@@ -32,14 +32,14 @@ class ParserHelperTest extends CakeTestCase {
 	function setup() {
 		Configure::write('Parsers', array(
 			'markdown' => array(
-				'MarkdownParser',
-				'MarkupParsers.Lib/Parser'),
+				'name' => 'Markdown',
+				'className' => 'MarkupParsers.Markdown'),
 			'bbcode' => array(
-				'BbcodeParser',
-				'MarkupParsers.Lib/Parser'),
+				'name' => 'BBCode',
+				'className' => 'MarkupParsers.Bbcode'),
 			'html' => array(
-				'HtmlParser',
-				'MarkupParsers.Lib/Parser')));
+				'name' => 'Html',
+				'className' => 'MarkupParsers.Html')));
 
 		$controller = null;
 		$View = new View($controller);
@@ -70,10 +70,10 @@ class ParserHelperTest extends CakeTestCase {
 		$string = '[b]Foobar[/b]';
 		$result = $this->Parser->parse($string, 'bbcode');
 		$this->assertEqual($result, array('<strong>Foobar</strong>'));
-		
+
 		$string = '<b>Foobar</b><!-- Page separator --><b>Barfoo</b>';
 		$result = $this->Parser->parse($string, 'html');
-		
+
 		$this->assertEqual($result, array('<b>Foobar</b>', '<b>Barfoo</b>'));
 	}
 

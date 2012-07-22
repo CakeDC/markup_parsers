@@ -21,42 +21,42 @@ class BbcodeParser implements ParserInterface {
 
 /**
  * Filters
- * 
+ *
  * @var array
  */
 	public $filters = array('cake', 'code', 'email', 'image', 'extended', 'link', 'list', 'table');
 
 /**
  * Quote
- * 
+ *
  * @var string
  */
 	public $quote = 'all';
 
 /**
  * Quote Style
- * 
+ *
  * @var string
  */
 	public $quoteStyle = 'double';
 
 /**
  * Strict
- * 
+ *
  * @var boolean
  */
 	public $strict = true;
 
 /**
  * Page separator pattern
- * 
+ *
  * @var string
  */
 	public static $pageSeparator = '[Page separator]';
 
 /**
  * Whether or not the code must be highlighted in the __highlightCode method
- * 
+ *
  * @var boolean
  */
 	protected $_codeHighlightingEnabled = true;
@@ -879,7 +879,7 @@ class BbcodeParser implements ParserInterface {
 
 /**
  * Parse method used for parsing a BBCode text and generating Html
- * 
+ *
  * @param string $string text to convert
  * @param array $options Valid keys are:
  * 	- charset
@@ -894,12 +894,12 @@ class BbcodeParser implements ParserInterface {
 		extract(array_merge($defaults, $options));
 
 		$this->_codeHighlightingEnabled = $highlight_code;
-		
+
 		$this->__charset = $charset;
 		$this->__reset();
 		$this->__text = $string;
 		$this->__parse();
-		
+
 		$data = explode(self::$pageSeparator, $this->__parsed);
 		if (count($data) == 1) {
 			// For compatibility reasons
