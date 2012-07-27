@@ -25,7 +25,7 @@
 class ParserRegistry {
 
 /**
- * Available payment processors
+ * Available parsers
  *
  * @var array
  */
@@ -39,18 +39,30 @@ class ParserRegistry {
 	private static $__availableParsers = array();
 
 /**
- * Initializes the registry by loading all the existing payment processors
+ * Initializes the registry by loading all the existing parsers
  *
  * @return void
  */
 	protected static function _init() {
+		$defaults = array(
+			'markdown' => array(
+				'name' => 'Markdown',
+				'className' => 'MarkupParsers.Markdown'),
+			'bbcode' => array(
+				'name' => 'BBCode',
+				'className' => 'MarkupParsers.Bbcode'),
+			'html' => array(
+				'name' => 'Html',
+				'className' => 'MarkupParsers.Html')
+		);
+		
 		if (empty(self::$__availableParsers)) {
-			self::$__availableParsers = Configure::read('Parsers');
+			self::$__availableParsers = array_merge($defaults, (array) Configure::read('Parsers'));
 		}
 	}
 
 /**
- * Returns the payment processors that implements the passed interfaces
+ * Returns the parsers that implements the passed interfaces
  *
  * @return array
  */
@@ -58,7 +70,6 @@ class ParserRegistry {
 		self::_init();
 
 		$result = array();
-		$parsers = Configure::read('Parsers');
 		foreach (self::$__availableParsers as $key => $parser) {
 			$result[$key] = $parser['name'];
 		}
