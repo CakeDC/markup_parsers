@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright 2010, Cake Development Corporation (http://cakedc.com)
+ * Copyright 2010-2012, Cake Development Corporation (http://cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010, Cake Development Corporation (http://cakedc.com)
+ * @copyright Copyright 2010-2012, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
+App::uses('ParserInterface', 'MarkupParsers.Lib');
+
 /**
- * DocMarkdown is a simple Markdown Parser.  It provides a set of syntax
- * parsing for documentation blocks.  It does not support the full markdown feature set
- * and implements several additional elements that have extra utility in documentation
- * for PHP projects.
+ * This Markdown Parser provides a set of syntax parsing for documentation blocks.
+ * It does not support the full markdown feature set and implements several additional
+ * elements that have extra utility in documentation for PHP projects.
  *
  * ### Unsuported syntax items:
  *
@@ -27,7 +28,7 @@
  * - Class::$property links. These are links to other class properties in your code base.
  * - Code blocks - Code blocks can be indicated with either {{{ code }}} or @@@ code @@@ or indented.
  *
- * DocMarkdown also implements the more 'strict' italic and bold flavours, so under_scored_variables
+ * Markdown also implements the more 'strict' italic and bold flavours, so under_scored_variables
  * are not interpreted as italicized text.
  *
  * Several patterns and ideas like list processing were adopted from
@@ -36,8 +37,7 @@
  * @package markup_parsers
  * @subpackage markup_parsers.libs
  */
-App::import('Lib', 'MarkupParsers.ParserInterface');
-class DocMarkdownParser implements ParserInterface {
+class MarkdownParser implements ParserInterface {
 
 /**
  * The text being parsed.
@@ -102,15 +102,36 @@ class DocMarkdownParser implements ParserInterface {
  * ### Options:
  *
  * - stripHtml - remove any HTML before parsing.
+ * - engine: default, markdown, markdown_extra
+ * 
+ * IDEAS
+ * - elements: allow further elemens like video, latex, ... (use registerElement to register new stuff)
  *
  * @param string $text Text to be converted
  * @param array $options Array of options for converting
  * @return string Parsed HTML
  */
 	public function parse($text, $options = array()) {
+		$defaults = array(
+			'engine' => 'default',
+		);
+		$options = am($defaults, $options);
+		
 		if (!empty($options['stripHtml'])) {
 			$text = strip_tags($text);
 		}
+		
+		if ($options['engine'] == 'markdown_extra') {
+			App::import('Vendor', 'MarkupParsers.markdown/markdown');
+			$Markdown = new MarkdownExtra_Parser;
+			return trim($Markdown->transform($text));
+			
+		} elseif ($options['engine'] == 'markdown') {
+			App::import('Vendor', 'MarkupParsers.markdown/markdown');
+			$Markdown = new Markdown_Parser;
+			return trim($Markdown->transform($text));
+		}
+		
 		$this->_placeHolders = array();
 		$text = str_replace("\r\n", "\n", $text);
 		$text = str_replace("\t", str_repeat(' ', $this->spacesPerTab), $text);
@@ -141,11 +162,11 @@ class DocMarkdownParser implements ParserInterface {
  * @return string Transformed text.
  */
 	protected function _runBlocks($text) {
+		$text = $this->_doCodeBlocksDelimited($text);
+		$text = $this->_doCodeBlocksIndented($text);
 		$text = $this->_doHeaders($text);
 		$text = $this->_doHorizontalRule($text);
 		$text = $this->_doLists($text);
-		$text = $this->_doCodeBlocksDelimited($text);
-		$text = $this->_doCodeBlocksIndented($text);
 		$text = $this->_doParagraphs($text);
 		return $text;
 	}
@@ -169,8 +190,8 @@ class DocMarkdownParser implements ParserInterface {
  */
 	protected function _doCodeBlocksIndented($text) {
 		$codePattern = sprintf(
-			'/(\n\n|\A)((?:[ ]{%s}.*\n+)+)((?=[ ]{0,%s}|\Z))/',
-			$this->spacesPerTab,$this->spacesPerTab
+			'/(\n\n|\A)((?: {%s}.*\n+)+)((?= {0,%s}|\Z))/',
+			$this->spacesPerTab, $this->spacesPerTab
 		);
 		$this->_indentedCode = true;
 		$return = preg_replace_callback($codePattern, array($this, '_codeBlockHelper'), $text);
@@ -209,7 +230,7 @@ class DocMarkdownParser implements ParserInterface {
  * @return string Transformed text
  */
 	protected function _doHeaders($text) {
-		$headingPattern = '/(#+)\s([^#\n]+)(#*)/';
+		$headingPattern = '/^(#{1,6})[ \t]*(.+?)[ \t]*(#*)$/m';
 		return preg_replace_callback($headingPattern, array($this, '_headingHelper'), $text);
 	}
 
@@ -221,9 +242,6 @@ class DocMarkdownParser implements ParserInterface {
  */
 	protected function _headingHelper($matches) {
 		$count = strlen($matches[1]);
-		if ($count > 6) {
-			$count = 6;
-		}
 		return $this->_makePlaceHolder(sprintf('<h%s>%s</h%s>', $count, trim($matches[2]), $count));
 	}
 
@@ -444,7 +462,7 @@ class DocMarkdownParser implements ParserInterface {
  * Helper function for replacing of inline links
  *
  * @return string Text
- * @see DocMarkdown::_doInlineLink()
+ * @see Markdown::_doInlineLink()
  */
 	protected function _inlineLinkHelper($matches) {
 		$title = null;
@@ -523,6 +541,10 @@ class DocMarkdownParser implements ParserInterface {
 	protected function _makePlaceHolder($text) {
 		$count = count($this->_placeHolders);
 		$marker = 'B0x1A' . $count;
+		while (array_key_exists($marker, $this->_placeHolders)) {
+			$count++;
+			$marker = 'B0x1A' . $count;
+		}
 		$this->_placeHolders[$marker] = $text;
 		return $marker;
 	}

@@ -1,7 +1,5 @@
 # Markup Parsers Plugin for CakePHP #
 
-Version 1.1
-
 This plugin offers a solution for working with different type of markup for you application. It offers both some markup parser implementations and a parser factory responsible for registering available parser classes and returning instances of them.
 
 It provides three different markup implementations:
@@ -36,16 +34,16 @@ This parser splits the input string in multiple pages using the `<!--Page Separa
 
 Every parser needs to be configured so they can be instantiated by the helper using the ParserRegistry class. To configure the parsers your are going to use in tour app put use the Configure class to list them.
 
-        Configure::write('Parsers.markdown', array(
+        Configure::write('Parsers.markdown' => array(
 			'name' => 'Markdown',
-			'className' => 'MarkupParsers.DocMarkdown'
+			'class' => array('MarkdownParser', 'MarkupParsers.Parser'), 
 		));
 
 If you have your own parser implementation you can list it to into the array this way:
 
-        Configure::write('Parsers.my_parser', array(
+        Configure::write('Parsers.my_parser' => array(
 		    'name' => 'MyParser',
-		    'className' => 'MyPlugin.MyParser'
+		    'class' => array('MyParser', 'MyPlugin.Parser'),
 	    ));
 
 ## Writing a parser ##
@@ -55,7 +53,7 @@ A Parser class must be a Library implementing the `ParserInterface` shipped as a
 
 Here is a simple Parser example:
 
-	App::import('Lib', 'MarkupParsers.ParserInterface');
+	App::uses('ParserInterface', 'MarkupParsers.Lib');
 	class FoobarParser implements ParserInterface {
 		public function parse($string, $options = array()) {
 			return str_replace('foo', 'bar', $string);
@@ -70,22 +68,15 @@ To use any parser in your views just include the Parser helper into the $helpers
 
         public $helpers = array('MarkupParsers.Parser');
 
-And in your views you can either use `Parser::parse()` to get multipage parsed content:
+And in your views
 
-		$pages = $this->Parser->parse($string);
-		foreach ($pages as $page) :
-			echo $this->Html->tag('div', $page, array('class' => 'page'));
-		endforeach;
-
-Or `Parser::parseAsString()` to get a string with parsed content no matter if it is a multipage text:
-
-        echo $this->Parser->parseAsString($string, 'my_parser'); // the second parameter can be left blank ad will use 'markdown' as default
+        echo $this->Parser->parse($string, 'my_parser'); // the second parameter can be left blank ad will use 'markdown' as default
 
 
 ## Requirements ##
 
 * PHP version: PHP 5.2+
-* CakePHP version: Cakephp 1.3 Stable
+* CakePHP version: Cakephp 2.0 Stable
 
 ## Support ##
 
@@ -95,7 +86,7 @@ For more information about our Professional CakePHP Services please visit the [C
 
 ## License ##
 
-Copyright 2009-2010, [Cake Development Corporation](http://cakedc.com)
+Copyright 2009-2011, [Cake Development Corporation](http://cakedc.com)
 
 Licensed under [The MIT License](http://www.opensource.org/licenses/mit-license.php)<br/>
 Redistributions of files must retain the above copyright notice.

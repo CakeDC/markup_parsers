@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright 2010, Cake Development Corporation (http://cakedc.com)
+ * Copyright 2010-2012, Cake Development Corporation (http://cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010, Cake Development Corporation (http://cakedc.com)
+ * @copyright Copyright 2010-2012, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-App::import('Lib', array('MarkupParsers.BbcodeParser'));
+
+App::uses('BbcodeParser', 'MarkupParsers.Parser');
 
 /**
  * HtmlParser test case
@@ -92,5 +93,9 @@ HTML;
 		$this->assertEqual($result, $expected);
 	}
 
+	public function assertTextEquals($string, $expected) {
+		return $this->assertEquals($string, $expected);
+	}
+	
 }
-?>
+

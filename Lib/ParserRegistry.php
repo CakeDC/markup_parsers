@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright 2010, Cake Development Corporation (http://cakedc.com)
+ * Copyright 2010-2012, Cake Development Corporation (http://cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010, Cake Development Corporation (http://cakedc.com)
+ * @copyright Copyright 2010-2012, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
@@ -25,7 +25,7 @@
 class ParserRegistry {
 
 /**
- * Available payment processors
+ * Available parsers
  *
  * @var array
  */
@@ -39,18 +39,30 @@ class ParserRegistry {
 	private static $__availableParsers = array();
 
 /**
- * Initializes the registry by loading all the existing payment processors
+ * Initializes the registry by loading all the existing parsers
  *
  * @return void
  */
 	protected static function _init() {
+		$defaults = array(
+			'markdown' => array(
+				'name' => 'Markdown',
+				'className' => 'MarkupParsers.Markdown'),
+			'bbcode' => array(
+				'name' => 'BBCode',
+				'className' => 'MarkupParsers.Bbcode'),
+			'html' => array(
+				'name' => 'Html',
+				'className' => 'MarkupParsers.Html')
+		);
+		
 		if (empty(self::$__availableParsers)) {
-			self::$__availableParsers = Configure::read('Parsers');
+			self::$__availableParsers = array_merge($defaults, (array) Configure::read('Parsers'));
 		}
 	}
 
 /**
- * Returns the payment processors that implements the passed interfaces
+ * Returns the parsers that implements the passed interfaces
  *
  * @return array
  */
@@ -58,7 +70,6 @@ class ParserRegistry {
 		self::_init();
 
 		$result = array();
-		$parsers = Configure::read('Parsers');
 		foreach (self::$__availableParsers as $key => $parser) {
 			$result[$key] = $parser['name'];
 		}
@@ -77,15 +88,8 @@ class ParserRegistry {
 		self::_init();
 
 		if (empty(self::$_parsers[$parser])) {
-			$class = self::$__availableParsers[$parser]['className'] . 'Parser';
-			App::import('Lib', $class);
-
-			$pieces = explode('.', $class);
-			if ($pieces == 2) {
-				$class = $pieces[0];
-			} else {
-				$class = $pieces[1];
-			}
+			list($class, $location) = self::$__availableParsers[$parser];
+			App::uses($class, $location);
 
 			if (!class_exists($class)) {
 				throw new Exception(__d('markup_parsers', 'Invalid Parser', true));
