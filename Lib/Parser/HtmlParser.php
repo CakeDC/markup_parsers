@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright 2010, Cake Development Corporation (http://cakedc.com)
+ * Copyright 2010-2012, Cake Development Corporation (http://cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010, Cake Development Corporation (http://cakedc.com)
+ * @copyright Copyright 2010-2012, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-App::import('Lib', 'MarkupParsers.ParserInterface');
-App::import('Core', 'Sanitize');
+App::uses('ParserInterface', 'MarkupParsers.Lib');
+App::uses('Sanitize', 'Utility');
 
 /**
  * Html Parser
@@ -19,6 +19,7 @@ App::import('Core', 'Sanitize');
  * @subpackage markup_parsers.libs
  */
 class HtmlParser implements ParserInterface {
+
 /**
  * Page separator pattern
  * 

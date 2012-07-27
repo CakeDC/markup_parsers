@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright 2010, Cake Development Corporation (http://cakedc.com)
+ * Copyright 2010-2012, Cake Development Corporation (http://cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010, Cake Development Corporation (http://cakedc.com)
+ * @copyright Copyright 2010-2012, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-App::import('Lib', array('MarkupParsers.DocMarkdownParser'));
+
+App::uses('MarkdownParser', 'MarkupParsers.Parser');
 
 /**
  * HtmlParser test case
@@ -16,7 +17,7 @@ App::import('Lib', array('MarkupParsers.DocMarkdownParser'));
  * @package markup_parsers
  * @subpackage markup_parsers.tests.cases.libs
  */
-class DocMarkdownParserTest extends CakeTestCase {
+class MarkdownParserTest extends CakeTestCase {
 
 /**
  * setUp method
@@ -24,7 +25,7 @@ class DocMarkdownParserTest extends CakeTestCase {
  * @return void
  */
 	public function setup() {
-		$this->Parser = new DocMarkdownParser();
+		$this->Parser = new MarkdownParser();
 	}
 
 /**
@@ -63,7 +64,7 @@ TEXT;
 <p></p>
 HTML;
 		$result = $this->Parser->parse($testText);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
 /**
@@ -75,32 +76,32 @@ HTML;
 		$text = 'Normal text *emphasis text* normal *emphasis* normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <em>emphasis text</em> normal <em>emphasis</em> normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = 'Normal text **bold** normal *emphasis* normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <strong>bold</strong> normal <em>emphasis</em> normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = 'Normal text ***bold*** normal *emphasis* normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <strong><em>bold</em></strong> normal <em>emphasis</em> normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = 'Normal text _emphasis text_ normal _emphasis_ normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <em>emphasis text</em> normal <em>emphasis</em> normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = 'Normal text __bold__ normal _emphasis_ normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <strong>bold</strong> normal <em>emphasis</em> normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = 'Normal text ___bold___ normal _emphasis_ normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <strong><em>bold</em></strong> normal <em>emphasis</em> normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
 /**
@@ -112,22 +113,22 @@ HTML;
 		$text = 'Normal text `code text` normal `code` normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <code>code text</code> normal <code>code</code> normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = 'Normal text ``code text` normal `code`` normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <code>code text` normal `code</code> normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = 'Normal text ``code text` < > & normal `code`` normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <code>code text` &lt; > &amp; normal `code</code> normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 		
 		$text = 'Normal text ``code text some_variable_here_code text`` normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <code>code text some_variable_here_code text</code> normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
 /**
@@ -139,17 +140,17 @@ HTML;
 		$text = 'Normal text www.foo.com normal code normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <a href="http://www.foo.com">www.foo.com</a> normal code normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = 'Normal text www.foo.com/page/foo:bar normal code normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <a href="http://www.foo.com/page/foo:bar">www.foo.com/page/foo:bar</a> normal code normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = 'Normal text http://www.foo.com normal code normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <a href="http://www.foo.com">http://www.foo.com</a> normal code normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
 /**
@@ -178,12 +179,12 @@ TEXT;
 		$text = 'Normal text [test link](http://www.foo.com) normal code normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <a href="http://www.foo.com">test link</a> normal code normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = 'Normal text [test link](http://www.foo.com "some title") normal code normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <a href="http://www.foo.com" title="some title">test link</a> normal code normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
 /**
@@ -195,7 +196,7 @@ TEXT;
 		$text = 'Normal < text [test link](http://www.foo.com) normal & code normal.';
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal &lt; text <a href="http://www.foo.com">test link</a> normal &amp; code normal.</p>';
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
 /**
@@ -219,9 +220,9 @@ TEXT;
 <h3>heading 3</h3>
 <h4>heading 4</h4>
 <h5>Imbalanced</h5>
-<h6>There is no heading 8</h6>
+<h6>## There is no heading 8</h6>
 HTML;
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
 /**
@@ -245,7 +246,7 @@ this is some
 text
 TEXT;
 			$result = $this->Parser->parse($text);
-			$this->assertEqual($result, $expected);
+			$this->assertTextEquals($result, $expected);
 
 			$text = <<<TEXT
 this is some
@@ -253,7 +254,7 @@ this is some
 text
 TEXT;
 			$result = $this->Parser->parse($text);
-			$this->assertEqual($result, $expected);
+			$this->assertTextEquals($result, $expected);
 
 			$text = <<<TEXT
 this is some
@@ -261,7 +262,7 @@ this is some
 text
 TEXT;
 			$result = $this->Parser->parse($text);
-			$this->assertEqual($result, $expected);
+			$this->assertTextEquals($result, $expected);
 		}
 	}
 
@@ -290,7 +291,7 @@ TEXT;
 <p>more text</p>
 HTML;
 		$result = $this->Parser->parse($text);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = <<<TEXT
 this is some
@@ -311,7 +312,7 @@ TEXT;
 <p>more text</p>
 HTML;
 		$result = $this->Parser->parse($text);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
 /**
@@ -354,7 +355,7 @@ TEXT;
 <p>Additional text</p>
 HTML;
 		$result = $this->Parser->parse($text);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
 /**
@@ -378,7 +379,7 @@ TEXT;
 <p>more text</p>
 HTML;
 		$result = $this->Parser->parse($text);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
 /**
@@ -406,7 +407,7 @@ TEXT;
 <p>more text</p>
 HTML;
 		$result = $this->Parser->parse($text);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = <<<TEXT
 this is some
@@ -427,7 +428,7 @@ TEXT;
 <p>more text</p>
 HTML;
 		$result = $this->Parser->parse($text);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = <<<TEXT
 this is some
@@ -452,7 +453,7 @@ TEXT;
 <p>more text</p>
 HTML;
 		$result = $this->Parser->parse($text);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
 /**
@@ -483,7 +484,7 @@ TEXT;
 <p>more text</p>
 HTML;
 		$result = $this->Parser->parse($text);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = <<<TEXT
 Some text here.
@@ -507,7 +508,7 @@ TEXT;
 <p>more text</p>
 HTML;
 		$result = $this->Parser->parse($text);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
 /**
@@ -536,7 +537,7 @@ that string is displayed as the empty element.</li>
 <p></p>
 HTML;
 		$result = $this->Parser->parse($text);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
 /**
@@ -567,7 +568,7 @@ TEXT;
 <p>more text</p>
 HTML;
 		$result = $this->Parser->parse($text);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = <<<TEXT
 Some text here.
@@ -591,7 +592,7 @@ TEXT;
 <p>more text</p>
 HTML;
 		$result = $this->Parser->parse($text);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
 /**
@@ -630,7 +631,7 @@ TEXT;
 <p>more text</p>
 HTML;
 		$result = $this->Parser->parse($text);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 
 		$text = <<<TEXT
 Some text here.
@@ -664,7 +665,7 @@ TEXT;
 <p>more text</p>
 HTML;
 		$result = $this->Parser->parse($text);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
 /**
@@ -701,9 +702,142 @@ TEXT;
 <p>more text</p>
 HTML;
 		$result = $this->Parser->parse($text);
-		$this->assertEqual($result, $expected);
+		$this->assertTextEquals($result, $expected);
 	}
 
+/**
+ * Test headings embedded in code blocks
+ *
+ * @return void
+ */
+	function testHeadingsInCodeBlocks() {
+		$text = <<<TEXT
+this is some
 
+	##
+	## This should not render as a heading
+	function test() {
+		echo '<test>';
+	}
+
+more text
+TEXT;
+		$expected = <<<HTML
+<p>this is some</p>
+
+<pre><code>##
+## This should not render as a heading
+function test() {
+    echo '&lt;test&gt;';
+}</code></pre>
+
+<p>more text</p>
+HTML;
+
+		$result = $this->Parser->parse($text);
+		$this->assertTextEquals($result, $expected);
+
+		$text = <<<TEXT
+Text
+
+	Code 1
+
+Some [linked](http://cakephp.org) text
+
+	Code 2
+
+Last Text
+TEXT;
+		$expected = <<<HTML
+<p>Text</p>
+
+<pre><code>Code 1</code></pre>
+
+<p>Some <a href="http://cakephp.org">linked</a> text</p>
+
+<pre><code>Code 2</code></pre>
+
+<p>Last Text</p>
+HTML;
+
+		$result = $this->Parser->parse($text);
+		$this->assertTextEquals($result, $expected);
+	}
+
+	// doesnt work - bullet list is not correctly transformed
+	public function testFunky() {
+		$text = <<<TEXT
+Text
+
+	Code 1
+
+Text
+
+[Link](http://google.com).
+
+Text
+
+* Bullet 1
+* Bullet 2
+* Bullet 3
+
+Text
+TEXT;
+		$expected = <<<HTML
+<p>Text</p>
+
+<pre><code>Code 1</code></pre>
+
+<p>Text</p>
+
+<p><a href="http://google.com">Link</a>.</p>
+
+<p>Text</p>
+
+<ul>
+<li>Bullet 1</li>
+<li>Bullet 2</li>
+<li>Bullet 3</li>
+</ul>
+
+<p>Text</p>
+HTML;
+
+		$result = $this->Parser->parse($text);
+		$this->assertTextEquals($result, $expected);
+	}
+
+	public function testParseWithOtherEngines() {
+		$testText = <<<TEXT
+# test #
+
+    Code
+
+ * One
+ * Two
+ * Three
+TEXT;
+		$expected = <<<HTML
+<h1>test</h1>
+
+<pre><code>Code
+</code></pre>
+
+<ul>
+<li>One</li>
+<li>Two</li>
+<li>Three</li>
+</ul>
+HTML;
+		$result = $this->Parser->parse($testText, array('engine'=>'markdown'));
+		$this->assertTextEquals($result, $expected);
+		
+		$result = $this->Parser->parse($testText, array('engine'=>'markdown_extra'));
+		$this->assertTextEquals($result, $expected);
+	}
+
+	public function assertTextEquals($string, $expected) {
+		return $this->assertEquals($string, $expected);
+	}
 }
-?>
+

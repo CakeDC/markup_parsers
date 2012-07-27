@@ -1,35 +1,36 @@
 <?php
 /**
- * Copyright 2010, Cake Development Corporation (http://cakedc.com)
+ * Copyright 2010-2012, Cake Development Corporation (http://cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010, Cake Development Corporation (http://cakedc.com)
+ * @copyright Copyright 2010-2012, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+
+App::uses('AppHelper', 'View/Helper');
 
 /**
  * Parser Helper
  *
- * @package markup_parsers
- * @subpackage markup_parsers.views.helpers
+ * @package MarkupParser
+ * @subpackage MarkupParser.View.Helper
  */
 class ParserHelper extends AppHelper {
 
 /**
- * Parse text from some plain text format and returns an array of pages
+ * Parse text from some plain text format
  *
  * @param string $text Text for parsing
  * @param string $format Format type
  * @return array Parsed pages of text
  */
-	public function parse($text, $parser = 'markdown') {
+	public function parse($text, $parser = 'markdown', $options = array()) {
 		$parsed = array($text);
 		try {
-			App::import('lib', 'MarkupParsers.ParserRegistry');
-			$Parser = ParserRegistry::getParser($parser);
-			$parsed = $Parser->parse($text);
+			App::uses('ParserRegistry', 'MarkupParsers.Lib');
+			$parsed = ParserRegistry::getParser($parser)->parse($text, $options);
 			if (!is_array($parsed)) {
 				$parsed = array($parsed);
 			}
@@ -50,11 +51,18 @@ class ParserHelper extends AppHelper {
  *
  * @param string $text Text for parsing
  * @param string $format Format type
- * @param string $pageGlue Separator to use to join pages together [default: none]
+ * @param array $options
+ * - see parse() 
+ * - pageGlue Separator to use to join pages together [default: none]
  * @return array Parsed text
  */
-	public function parseAsString($text, $parser = 'markdown', $pageGlue = '') {
-		return implode($pageGlue, $this->parse($text, $parser));
+	public function parseAsString($text, $parser = 'markdown', $options = array()) {
+		$pageGlue = '';
+		if (isset($options['pageGlue'])) {
+			$pageGlue = $options['pageGlue'];
+			unset($options['pageGlue']);
+		}
+		return implode($pageGlue, $this->parse($text, $parser, $options));
 	}
-
+	
 }
