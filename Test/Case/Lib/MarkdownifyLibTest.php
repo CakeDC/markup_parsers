@@ -7,11 +7,11 @@ App::uses('MarkdownifyLib', 'MarkupParsers.Lib');
 class MarkdownifyLibTest extends CakeTestCase {
 
 	public $Markdownify;
-	
-	
+
+
 	public function setUp() {
 		parent::setUp();
-		
+
 		$this->Markdownify = new MarkdownifyLib();
 	}
 
@@ -48,11 +48,9 @@ Some Text
 *   Two
 *   Three
 TEXT;
-		
+
 		$res = $this->Markdownify->parseString($html);
-		//debug($res);
-		//ob_flush();
-		$this->assertTextEquals($expected, trim($res));
+		$this->assertTextEquals($expected, $res);
 	}
 
 	// not quite the expected result, though...
@@ -60,7 +58,7 @@ TEXT;
 		$html = <<<HTML
 <h1>header one</h1>
 
-Some Text
+Some Text 
 
 <h2>header two</h2>
 <h3>header three</h3>
@@ -73,7 +71,6 @@ Some Text
 <p>Some <code>inline code</code> and <b>bold text</b> as well as <i>italic text</i> and of course <b><i>both</i></b>!</p>
 
 <p>And some <a href="http://www.google.com">google-link</a>.</p>
-
 HTML;
 
 		// not quite the expected result, though (text without p is problematic)...
@@ -96,14 +93,9 @@ And some [google-link][1].
 
  [1]: http://www.google.com
 TEXT;
-		
+
 		$res = $this->Markdownify->parseString($html);
-		ob_flush();
-		$this->assertEquals($expected, trim($res));
+		$this->assertTextEquals($expected, $res);
 	}
 
-	public function assertTextEquals($string, $expected) {
-		return $this->assertEquals($string, $expected);
-	}
-	
 }

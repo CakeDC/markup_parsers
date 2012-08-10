@@ -52,7 +52,7 @@ class ParserHelper extends AppHelper {
  * @param string $text Text for parsing
  * @param string $format Format type
  * @param array $options
- * - see parse() 
+ * - see parse()
  * - pageGlue Separator to use to join pages together [default: none]
  * @return array Parsed text
  */
@@ -64,5 +64,5 @@ class ParserHelper extends AppHelper {
 		}
 		return implode($pageGlue, $this->parse($text, $parser, $options));
 	}
-	
+
 }
