@@ -11,9 +11,9 @@
 
 /**
  * Parser Registry. A factory to return parser instances from available parsers listed using the Configure class
- * 
+ *
  * To setup a new parser use
- * 
+ *
  *		Configure::write('Parsers.my_parser' => array(
  *			'name' => 'MyParser',
  *			'className' => 'MyPlugin.MyParser'
@@ -36,7 +36,7 @@ class ParserRegistry {
  *
  * @var array
  */
-	private static $__availableParsers = array();
+	protected static $_availableParsers = array();
 
 /**
  * Initializes the registry by loading all the existing parsers
@@ -55,9 +55,9 @@ class ParserRegistry {
 				'name' => 'Html',
 				'className' => 'MarkupParsers.Html')
 		);
-		
-		if (empty(self::$__availableParsers)) {
-			self::$__availableParsers = array_merge($defaults, (array) Configure::read('Parsers'));
+
+		if (empty(self::$_availableParsers)) {
+			self::$_availableParsers = array_merge($defaults, (array)Configure::read('Parsers'));
 		}
 	}
 
@@ -70,7 +70,7 @@ class ParserRegistry {
 		self::_init();
 
 		$result = array();
-		foreach (self::$__availableParsers as $key => $parser) {
+		foreach (self::$_availableParsers as $key => $parser) {
 			$result[$key] = $parser['name'];
 		}
 
@@ -82,13 +82,15 @@ class ParserRegistry {
  *
  * @param string parser key
  * @return object Parser instance
- * 
+ *
  */
 	public static function getParser($parser = '') {
 		self::_init();
 
 		if (empty(self::$_parsers[$parser])) {
-			list($class, $location) = self::$__availableParsers[$parser];
+			list($plugin, $class) = pluginSplit(self::$_availableParsers[$parser]['className']);
+			$location = (!empty($plugin) ? $plugin . '.' : '' ) . 'Parser';
+			$class .= 'Parser';
 			App::uses($class, $location);
 
 			if (!class_exists($class)) {
