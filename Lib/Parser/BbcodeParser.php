@@ -21,59 +21,59 @@ class BbcodeParser implements ParserInterface {
 
 /**
  * Filters
- * 
+ *
  * @var array
  */
 	public $filters = array('cake', 'code', 'email', 'image', 'extended', 'link', 'list', 'table');
 
 /**
  * Quote
- * 
+ *
  * @var string
  */
 	public $quote = 'all';
 
 /**
  * Quote Style
- * 
+ *
  * @var string
  */
 	public $quoteStyle = 'double';
 
 /**
  * Strict
- * 
+ *
  * @var boolean
  */
 	public $strict = true;
 
 /**
  * Page separator pattern
- * 
+ *
  * @var string
  */
 	public static $pageSeparator = '[Page separator]';
 
 /**
- * Whether or not the code must be highlighted in the __highlightCode method
- * 
+ * Whether or not the code must be highlighted in the _highlightCode method
+ *
  * @var boolean
  */
 	protected $_codeHighlightingEnabled = true;
 
-	protected $__charset = 'UTF-8';
+	protected $_charset = 'UTF-8';
 
-	protected $__text = null;
+	protected $_text = null;
 
-	protected $__parsed = null;
+	protected $_parsed = null;
 
-	protected $__preparsed = null;
+	protected $_preparsed = null;
 
-	protected $__tags = array();
+	protected $_tags = array();
 
-	protected $__builtTags = array();
+	protected $_builtTags = array();
 
-	protected $__basicTags = array(
+	protected $_basicTags = array(
 		'b' => array(
 			'open' => 'strong',
 			'close' => 'strong',
@@ -123,7 +123,7 @@ class BbcodeParser implements ParserInterface {
 			'attributes' => array()
 		),
 	);
-	protected $__emailTags = array(
+	protected $_emailTags = array(
 		'email' => array(
 			'open' => 'a',
 			'close' => 'a',
@@ -131,7 +131,7 @@ class BbcodeParser implements ParserInterface {
 			'attributes' => array('email' => 'href=%2$smailto:%1$s%2$s')
 		)
 	);
-	protected $__imageTags = array(
+	protected $_imageTags = array(
 		'img' => array(
 			'open' => 'img',
 			'close' => '',
@@ -143,7 +143,7 @@ class BbcodeParser implements ParserInterface {
 			)
 		)
 	);
-	protected $__extendedTags = array(
+	protected $_extendedTags = array(
 		'color' => array(
 			'open' => 'span',
 			'close' => 'span',
@@ -217,7 +217,7 @@ class BbcodeParser implements ParserInterface {
 			'attributes' => array()
 		)
 	);
-	protected $__linkTags = array(
+	protected $_linkTags = array(
 		'url' => array(
 			'open' => 'a',
 			'close' => 'a',
@@ -225,7 +225,7 @@ class BbcodeParser implements ParserInterface {
 			'attributes' => array('url' => 'href=%2$s%1$s%2$s')
 		)
 	);
-	protected $__tableTags = array(
+	protected $_tableTags = array(
 		'table' => array(
 			'open' => 'table',
 			'close' => 'table',
@@ -253,7 +253,7 @@ class BbcodeParser implements ParserInterface {
 			'attributes' => array()
 		)
 	);
-	protected $__listTags = array(
+	protected $_listTags = array(
 		'list' => array(
 			'open' => 'ol',
 			'close' => 'ol',
@@ -277,27 +277,27 @@ class BbcodeParser implements ParserInterface {
 		)
 	);
 
-	function __addParaTag($string) {
+	protected function _addParaTag($string) {
 		$str = explode("\n", $string);
 		$count = count($str);
 		$newString = null;
 		for ($i = 0; $i < $count; $i++) {
 			if (preg_match('/[\\w]/', $str[$i])) {
-				$newString[] = '[p]' . htmlentities($str[$i], ENT_COMPAT, $this->__charset) . '[/p]';
+				$newString[] = '[p]' . htmlentities($str[$i], ENT_COMPAT, $this->_charset) . '[/p]';
 			}
 		}
 		$string = implode(null, $newString);
 		return $string;
 	}
 
-	function __allowed($out, $in) {
-		if (!$out || ($this->__tags[$out]['allowed'] == 'all')) {
+	protected function _allowed($out, $in) {
+		if (!$out || ($this->_tags[$out]['allowed'] == 'all')) {
 			return true;
 		}
-		if ($this->__tags[$out]['allowed'] == 'none') {
+		if ($this->_tags[$out]['allowed'] == 'none') {
 			return false;
 		}
-		$ar = explode('^', $this->__tags[$out]['allowed']);
+		$ar = explode('^', $this->_tags[$out]['allowed']);
 		$tags = explode(',', $ar[1]);
 		if ($ar[0] == 'none' && in_array($in, $tags)) {
 			return true;
@@ -308,26 +308,26 @@ class BbcodeParser implements ParserInterface {
 		return false;
 	}
 
-	function __basic() {
-		preg_match_all('/(\\[indent])([\\s\\S]*?)(\\[\/indent])/i', $this->__text, $result, PREG_PATTERN_ORDER);
+	protected function _basic() {
+		preg_match_all('/(\\[indent])([\\s\\S]*?)(\\[\/indent])/i', $this->_text, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
 			for ($i = 0; $i < $count; $i++) {
-				$this->__text = str_replace($result[0][$i], $this->__encode(str_replace("\r\n", " ", '[indent]' . $this->__addParaTag($result[2][$i]) . '[/indent]')), $this->__text);
+				$this->_text = str_replace($result[0][$i], $this->_encode(str_replace("\r\n", " ", '[indent]' . $this->_addParaTag($result[2][$i]) . '[/indent]')), $this->_text);
 			}
 		}
-		$this->__preparsed = $this->__text;
+		$this->_preparsed = $this->_text;
 	}
 
-	function __buildOutput() {
-		$this->__parsed = '';
-		foreach ($this->__builtTags as $tag) {
+	protected function _buildOutput() {
+		$this->_parsed = '';
+		foreach ($this->_builtTags as $tag) {
 			switch ($tag['type']) {
 				case 0:
-					$this->__parsed .= $tag['text'];
+					$this->_parsed .= $tag['text'];
 					break;
 				case 1:
-					$this->__parsed .= '<' . $this->__tags[$tag['tag']]['open'];
+					$this->_parsed .= '<' . $this->_tags[$tag['tag']]['open'];
 					if ($this->quoteStyle === 'single') {
 						$quote = "'";
 					} else {
@@ -336,30 +336,30 @@ class BbcodeParser implements ParserInterface {
 					foreach ($tag['attributes'] as $key => $value) {
 						$value = preg_replace('#(activex|applet|about|chrome|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base):#is', "\\1&#058;", $value);
 						if (($this->quote == 'nothing') || (($this->quote == 'strings') && is_numeric($v))) {
-							$this->__parsed .= ' ' . sprintf($this->__tags[$tag['tag']]['attributes'][$key], $value, '');
+							$this->_parsed .= ' ' . sprintf($this->_tags[$tag['tag']]['attributes'][$key], $value, '');
 						} else {
-							$this->__parsed .= ' ' . sprintf($this->__tags[$tag['tag']]['attributes'][$key], $value, $quote);
+							$this->_parsed .= ' ' . sprintf($this->_tags[$tag['tag']]['attributes'][$key], $value, $quote);
 						}
 					}
-					if ($this->__tags[$tag['tag']]['close'] == '' && $this->strict === true) {
-						$this->__parsed .= ' /';
+					if ($this->_tags[$tag['tag']]['close'] == '' && $this->strict === true) {
+						$this->_parsed .= ' /';
 					}
-					$this->__parsed .= '>';
+					$this->_parsed .= '>';
 					break;
 				case 2:
-					if ($this->__tags[$tag['tag']]['close'] != '') {
-						$this->__parsed .= '</' . $this->__tags[$tag['tag']]['close'] . '>';
+					if ($this->_tags[$tag['tag']]['close'] != '') {
+						$this->_parsed .= '</' . $this->_tags[$tag['tag']]['close'] . '>';
 					}
 					break;
 			}
 		}
 	}
 
-	function __buildTag($string) {
+	protected function _buildTag($string) {
 		$tag = array('text' => $string, 'attributes' => array());
 		if (substr($string, 1, 1) == '/') {
 			$tag['tag'] = strtolower(substr($string, 2, strlen($string) - 3));
-			if (!in_array($tag['tag'], array_keys($this->__tags))) {
+			if (!in_array($tag['tag'], array_keys($this->_tags))) {
 				return false;
 			} else {
 				$tag['type'] = 2;
@@ -375,14 +375,14 @@ class BbcodeParser implements ParserInterface {
 				return false;
 			}
 			$tag['tag'] = strtolower($tags[1]);
-			if (!in_array($tag['tag'], array_keys($this->__tags))) {
+			if (!in_array($tag['tag'], array_keys($this->_tags))) {
 				return false;
 			}
 			$attributes = array();
 			preg_match_all('/[\\s\\[]([a-z0-9]+)=([^\\s\\]]+)(?=[\\s\\]])/i', $string, $attributes, PREG_SET_ORDER);
 			foreach ($attributes as $attribute) {
 				$name = strtolower($attribute[1]);
-				if (in_array($name, array_keys($this->__tags[$tag['tag']]['attributes']))) {
+				if (in_array($name, array_keys($this->_tags[$tag['tag']]['attributes']))) {
 					$tag['attributes'][$name] = $attribute[2];
 				}
 			}
@@ -390,8 +390,8 @@ class BbcodeParser implements ParserInterface {
 		}
 	}
 
-	function __buildTags() {
-		$string = $this->__preparsed;
+	protected function _buildTags() {
+		$string = $this->_preparsed;
 		$position = 0;
 		$length = strlen($string);
 		$openedTags = array();
@@ -422,11 +422,11 @@ class BbcodeParser implements ParserInterface {
 					$tag['type'] = 0;
 				} else {
 					$newPosition = $close + 1;
-					$newTag = $this->__buildTag(substr($string, $position, $close - $position + 1));
+					$newTag = $this->_buildTag(substr($string, $position, $close - $position + 1));
 					if (($newTag !== false)) {
 						$tag = $newTag;
 						// Remove an opening tag if there is a no matching closing tag in the string
-						if ($newTag['type'] == 1 && !empty($this->__tags[$newTag['tag']]['close'])) {
+						if ($newTag['type'] == 1 && !empty($this->_tags[$newTag['tag']]['close'])) {
 							$closingTag = '[/' . $newTag['tag'] . ']';
 							$expectedOccurences = array_key_exists($newTag['tag'], $openedTags) ? $openedTags[$newTag['tag']] : 0;
 							if (substr_count($string, $closingTag, $position) < $expectedOccurences + 1) {
@@ -454,108 +454,108 @@ class BbcodeParser implements ParserInterface {
 			}
 			if ($tag['type'] === 0 && isset($prev) && $prev['type'] === 0) {
 				$tag['text'] = $prev['text'] . $tag['text'];
-				array_pop($this->__builtTags);
+				array_pop($this->_builtTags);
 			}
-			$this->__builtTags[] = $tag;
+			$this->_builtTags[] = $tag;
 			$prev = $tag;
 			$position = $newPosition;
 		}
 	}
 
-	function __cake() {
-		preg_match_all('/(\\[model])([\\s\\S]*?)(\\[\/model])/i', $this->__text, $result, PREG_PATTERN_ORDER);
+	protected function _cake() {
+		preg_match_all('/(\\[model])([\\s\\S]*?)(\\[\/model])/i', $this->_text, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
 			for ($i = 0; $i < $count; $i++) {
 				$position = strpos('<?php', $result[2][$i]);
 				if ($position === false) {
-					$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]Model Class:[/b]</h4>' . $this->__highlightCode('<?php ' . $result[2][$i] . '?>', true)), $this->__text);
+					$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]Model Class:[/b]</h4>' . $this->_highlightCode('<?php ' . $result[2][$i] . '?>', true)), $this->_text);
 				} else {
-					$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]Model Class:[/b]</h4>' . $this->__highlightCode($result[2][$i])), $this->__text);
+					$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]Model Class:[/b]</h4>' . $this->_highlightCode($result[2][$i])), $this->_text);
 				}
 			}
 		}
-		preg_match_all('/(\\[view])([\\s\\S]*?)(\\[\/view])/i', $this->__text, $result, PREG_PATTERN_ORDER);
+		preg_match_all('/(\\[view])([\\s\\S]*?)(\\[\/view])/i', $this->_text, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
 			for ($i = 0; $i < $count; $i++) {
-				$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]View Template:[/b]</h4>' . $this->__highlightCode($result[2][$i])), $this->__text);
+				$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]View Template:[/b]</h4>' . $this->_highlightCode($result[2][$i])), $this->_text);
 			}
 		}
-		preg_match_all('/(\\[controller])([\\s\\S]*?)(\\[\/controller])/i', $this->__text, $result, PREG_PATTERN_ORDER);
-		if (!empty($result[0])) {
-			$count = count($result[0]);
-			for ($i = 0; $i < $count; $i++) {
-				$position = strpos('<?php', $result[2][$i]);
-				if ($position === false) {
-					$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]Controller Class:[/b]</h4>' . $this->__highlightCode('<?php ' . $result[2][$i] . '?>', true)), $this->__text);
-				} else {
-					$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]Controller Class:[/b]</h4>' . $this->__highlightCode($result[2][$i])), $this->__text);
-				}
-			}
-		}
-		preg_match_all('/(\\[helper])([\\s\\S]*?)(\\[\/helper])/i', $this->__text, $result, PREG_PATTERN_ORDER);
+		preg_match_all('/(\\[controller])([\\s\\S]*?)(\\[\/controller])/i', $this->_text, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
 			for ($i = 0; $i < $count; $i++) {
 				$position = strpos('<?php', $result[2][$i]);
 				if ($position === false) {
-					$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]Helper Class:[/b]</h4>' . $this->__highlightCode('<?php ' . $result[2][$i] . '?>', true)), $this->__text);
+					$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]Controller Class:[/b]</h4>' . $this->_highlightCode('<?php ' . $result[2][$i] . '?>', true)), $this->_text);
 				} else {
-					$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]Helper Class:[/b]</h4>' . $this->__highlightCode($result[2][$i])), $this->__text);
+					$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]Controller Class:[/b]</h4>' . $this->_highlightCode($result[2][$i])), $this->_text);
 				}
 			}
 		}
-		preg_match_all('/(\\[component])([\\s\\S]*?)(\\[\/component])/i', $this->__text, $result, PREG_PATTERN_ORDER);
+		preg_match_all('/(\\[helper])([\\s\\S]*?)(\\[\/helper])/i', $this->_text, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
 			for ($i = 0; $i < $count; $i++) {
 				$position = strpos('<?php', $result[2][$i]);
 				if ($position === false) {
-					$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]Component Class:[/b]</h4>' . $this->__highlightCode('<?php ' . $result[2][$i] . '?>', true)), $this->__text);
+					$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]Helper Class:[/b]</h4>' . $this->_highlightCode('<?php ' . $result[2][$i] . '?>', true)), $this->_text);
 				} else {
-					$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]Component Class:[/b]</h4>' . $this->__highlightCode($result[2][$i])), $this->__text);
+					$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]Helper Class:[/b]</h4>' . $this->_highlightCode($result[2][$i])), $this->_text);
 				}
 			}
 		}
-		preg_match_all('/(\\[datasource])([\\s\\S]*?)(\\[\/datasource])/i', $this->__text, $result, PREG_PATTERN_ORDER);
+		preg_match_all('/(\\[component])([\\s\\S]*?)(\\[\/component])/i', $this->_text, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
 			for ($i = 0; $i < $count; $i++) {
 				$position = strpos('<?php', $result[2][$i]);
 				if ($position === false) {
-					$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]DataSource Class:[/b]</h4>' . $this->__highlightCode('<?php ' . $result[2][$i] . '?>', true)), $this->__text);
+					$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]Component Class:[/b]</h4>' . $this->_highlightCode('<?php ' . $result[2][$i] . '?>', true)), $this->_text);
 				} else {
-					$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]DataSource Class:[/b]</h4>' . $this->__highlightCode($result[2][$i])), $this->__text);
+					$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]Component Class:[/b]</h4>' . $this->_highlightCode($result[2][$i])), $this->_text);
 				}
 			}
 		}
-		preg_match_all('/(\\[behavior])([\\s\\S]*?)(\\[\/behavior])/i', $this->__text, $result, PREG_PATTERN_ORDER);
+		preg_match_all('/(\\[datasource])([\\s\\S]*?)(\\[\/datasource])/i', $this->_text, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
 			for ($i = 0; $i < $count; $i++) {
 				$position = strpos('<?php', $result[2][$i]);
 				if ($position === false) {
-					$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]Behavior Class:[/b]</h4>' . $this->__highlightCode('<?php ' . $result[2][$i] . '?>', true)), $this->__text);
+					$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]DataSource Class:[/b]</h4>' . $this->_highlightCode('<?php ' . $result[2][$i] . '?>', true)), $this->_text);
 				} else {
-					$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]Behavior Class:[/b]</h4>' . $this->__highlightCode($result[2][$i])), $this->__text);
+					$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]DataSource Class:[/b]</h4>' . $this->_highlightCode($result[2][$i])), $this->_text);
 				}
 			}
 		}
-		$this->__preparsed = $this->__text;
+		preg_match_all('/(\\[behavior])([\\s\\S]*?)(\\[\/behavior])/i', $this->_text, $result, PREG_PATTERN_ORDER);
+		if (!empty($result[0])) {
+			$count = count($result[0]);
+			for ($i = 0; $i < $count; $i++) {
+				$position = strpos('<?php', $result[2][$i]);
+				if ($position === false) {
+					$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]Behavior Class:[/b]</h4>' . $this->_highlightCode('<?php ' . $result[2][$i] . '?>', true)), $this->_text);
+				} else {
+					$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]Behavior Class:[/b]</h4>' . $this->_highlightCode($result[2][$i])), $this->_text);
+				}
+			}
+		}
+		$this->_preparsed = $this->_text;
 	}
 
-	function __child($out, $in) {
-		if (!isset($this->__tags[$out]['child']) || ($this->__tags[$out]['child'] == 'all')) {
+	protected function _child($out, $in) {
+		if (!isset($this->_tags[$out]['child']) || ($this->_tags[$out]['child'] == 'all')) {
 			return false;
 		}
-		$ar = explode('^', $this->__tags[$out]['child']);
+		$ar = explode('^', $this->_tags[$out]['child']);
 		$tags = explode(',', $ar[1]);
 		if ($ar[0] == 'none') {
 			if ($in && in_array($in, $tags)) {
 				return false;
 			}
-			return $this->__buildTag('[' . $tags[0] . ']');
+			return $this->_buildTag('[' . $tags[0] . ']');
 		}
 		if ($ar[0] == 'all' && $in && !in_array($in, $tags)) {
 			return false;
@@ -563,68 +563,68 @@ class BbcodeParser implements ParserInterface {
 		return true;
 	}
 
-	function __code() {
-		preg_match_all('/(\\[code])([\\s\\S]*?)(\\[\/code])/i', $this->__text, $result, PREG_PATTERN_ORDER);
+	protected function _code() {
+		preg_match_all('/(\\[code])([\\s\\S]*?)(\\[\/code])/i', $this->_text, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
 			for ($i = 0; $i < $count; $i++) {
-				$this->__text = str_replace($result[0][$i], $this->__encode($this->__highlightCode($result[2][$i])), $this->__text);
+				$this->_text = str_replace($result[0][$i], $this->_encode($this->_highlightCode($result[2][$i])), $this->_text);
 			}
 		}
-		preg_match_all('/(\\[php])([\\s\\S]*?)(\\[\/php])/i', $this->__text, $result, PREG_PATTERN_ORDER);
+		preg_match_all('/(\\[php])([\\s\\S]*?)(\\[\/php])/i', $this->_text, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
 			for ($i = 0; $i < $count; $i++) {
 				$position = strpos('<?php', $result[2][$i]);
 				if ($position === false) {
-					$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]PHP Snippet:[/b]</h4>' . $this->__highlightCode('<?php ' . $result[2][$i] . '?>', true)), $this->__text);
+					$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]PHP Snippet:[/b]</h4>' . $this->_highlightCode('<?php ' . $result[2][$i] . '?>', true)), $this->_text);
 				} else {
-					$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]PHP Snippet:[/b]</h4>' . $this->__highlightCode($result[2][$i])), $this->__text);
+					$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]PHP Snippet:[/b]</h4>' . $this->_highlightCode($result[2][$i])), $this->_text);
 				}
 			}
 		}
-		preg_match_all('/(\\[sql])([\\s\\S]*?)(\\[\/sql])/i', $this->__text, $result, PREG_PATTERN_ORDER);
+		preg_match_all('/(\\[sql])([\\s\\S]*?)(\\[\/sql])/i', $this->_text, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
 			for ($i = 0; $i < $count; $i++) {
-				$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]SQL:[/b]</h4>' . $this->__highlightCode($result[2][$i])), $this->__text);
+				$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]SQL:[/b]</h4>' . $this->_highlightCode($result[2][$i])), $this->_text);
 			}
 		}
-		preg_match_all('/(\\[html])([\\s\\S]*?)(\\[\/html])/i', $this->__text, $result, PREG_PATTERN_ORDER);
+		preg_match_all('/(\\[html])([\\s\\S]*?)(\\[\/html])/i', $this->_text, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
 			for ($i = 0; $i < $count; $i++) {
-				$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]HTML:[/b]</h4>' . $this->__highlightCode($result[2][$i])), $this->__text);
+				$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]HTML:[/b]</h4>' . $this->_highlightCode($result[2][$i])), $this->_text);
 			}
 		}
-		preg_match_all('/(\\[xml])([\\s\\S]*?)(\\[\/xml])/i', $this->__text, $result, PREG_PATTERN_ORDER);
+		preg_match_all('/(\\[xml])([\\s\\S]*?)(\\[\/xml])/i', $this->_text, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
 			for ($i = 0; $i < $count; $i++) {
-				$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]XML:[/b]</h4>' . $this->__highlightCode($result[2][$i])), $this->__text);
+				$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]XML:[/b]</h4>' . $this->_highlightCode($result[2][$i])), $this->_text);
 			}
 		}
-		preg_match_all('/(\\[css])([\\s\\S]*?)(\\[\/css])/i', $this->__text, $result, PREG_PATTERN_ORDER);
+		preg_match_all('/(\\[css])([\\s\\S]*?)(\\[\/css])/i', $this->_text, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
 			for ($i = 0; $i < $count; $i++) {
-				$this->__text = str_replace($result[0][$i], $this->__encode('<h4>[b]CSS:[/b]</h4>' . $this->__highlightCode($result[2][$i])), $this->__text);
+				$this->_text = str_replace($result[0][$i], $this->_encode('<h4>[b]CSS:[/b]</h4>' . $this->_highlightCode($result[2][$i])), $this->_text);
 			}
 		}
-		$this->__preparsed = $this->__text;
+		$this->_preparsed = $this->_text;
 	}
 
-	function __construct() {
+	public function __construct() {
 		foreach ($this->filters as $filter) {
-			$type = '__' . $filter . 'Tags';
+			$type = '_' . $filter . 'Tags';
 			if (isset($this->$type)) {
-				$this->__tags = array_merge($this->__tags, $this->$type);
+				$this->_tags = array_merge($this->_tags, $this->$type);
 			}
 		}
-		$this->__tags = array_merge($this->__tags, $this->__basicTags);
+		$this->_tags = array_merge($this->_tags, $this->_basicTags);
 	}
 
-	function __decode($value) {
+	protected function _decode($value) {
 		preg_match_all('/(\\[encoded])(.*)(\\[\/encoded])/', $value, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
@@ -632,24 +632,24 @@ class BbcodeParser implements ParserInterface {
 				$value = str_replace($result[0][$i], base64_decode($result[2][$i]), $value);
 			}
 		}
-		$this->__preparsed = $value;
+		$this->_preparsed = $value;
 	}
 
-	function __encode($value) {
+	protected function _encode($value) {
 		return '[encoded]' . base64_encode($value) . '[/encoded]';
 	}
 
-	function __email() {
+	protected function _email() {
 		$pattern = array('/(^|\\s)([-a-z0-9_.]+@[-a-z0-9.]+\\.[a-z]{2,4})/i', '/\\[email(\\]|.*\\])(.*)\\[\/email\\]/i');
 		$replace = array('\\1[email=\\2]\\2[/email]', '[email=\\2\\1\\2[/email]');
-		$this->__preparsed = preg_replace($pattern, $replace, $this->__text);
+		$this->_preparsed = preg_replace($pattern, $replace, $this->_text);
 	}
 
-	function __extended() {
+	protected function _extended() {
 		return true;
 	}
 
-	function __highlightCode($result) {
+	protected function _highlightCode($result) {
 		if (!$this->_codeHighlightingEnabled) {
 			$formated = '<code>' . $result . '</code>';
 		} else {
@@ -658,18 +658,18 @@ class BbcodeParser implements ParserInterface {
 		return $formated;
 	}
 
-	function __image() {
-		$this->__preparsed = preg_replace('/\\[img(\\s?.*)\\](.*)\\[\/img\\]/', "[img=\$2\$1][/img]", $this->__text);
+	protected function _image() {
+		$this->_preparsed = preg_replace('/\\[img(\\s?.*)\\](.*)\\[\/img\\]/', "[img=\$2\$1][/img]", $this->_text);
 	}
 
-	function __link() {
+	protected function _link() {
 		$pattern = array("/(?<![\"'=\]\/])(\[[^\]]*\])?(((http|https|ftp):\/\/|www)[@-a-z0-9.]+\.[a-z]{2,4}[^\s()\[\]]*)/i", "!\[url(\]|\s.*\])(.*)\[/url\]!iU", "!\[url=((([a-z]*:(//)?)|www)[@-a-z0-9.]+)([^\s\[\]]*)\](.*)\[/url\]!i");
-		$pp = preg_replace_callback($pattern[0], array($this, '__linkExpand'), $this->__text);
+		$pp = preg_replace_callback($pattern[0], array($this, '_linkExpand'), $this->_text);
 		$pp = preg_replace($pattern[1], "[url=\$2\$1\$2[/url]", $pp);
-		$this->__preparsed = preg_replace_callback($pattern[2], array($this, '__linkFinish'), $pp);
+		$this->_preparsed = preg_replace_callback($pattern[2], array($this, '_linkFinish'), $pp);
 	}
 
-	function __linkExpand($matches) {
+	protected function _linkExpand($matches) {
 		$pass = strpos($matches[1], '[url');
 		if ($pass !== false) {
 			return $matches[0];
@@ -694,7 +694,7 @@ class BbcodeParser implements ParserInterface {
 		}
 	}
 
-	function __linkFinish($matches) {
+	protected function _linkFinish($matches) {
 		$urlServ = $matches[1];
 		$path = $matches[5];
 		$off = strpos($urlServ, ':');
@@ -713,10 +713,10 @@ class BbcodeParser implements ParserInterface {
 		}
 	}
 
-	function __list() {
+	protected function _list() {
 		$pattern = array('/\\[\\*\\]/i', '/\\[(u?)list=(?-i:A)(\\s*[^\\]]*)\\]/i', '/\\[(u?)list=(?-i:a)(\\s*[^\\]]*)\\]/i', '/\\[(u?)list=(?-i:I)(\\s*[^\\]]*)\\]/i', '/\\[(u?)list=(?-i:i)(\\s*[^\\]]*)\\]/i', '/\\[(u?)list=(?-i:1)(\\s*[^\\]]*)\\]/i', '/\\[(u?)list([^\\]]*)\\]/i');
 		$replace = array('[li]', '[$1list=upper-alpha$2]', '[$1list=lower-alpha$2]', '[$1list=upper-roman$2]', '[$1list=lower-roman$2]', '[$1list=decimal$2]', '[$1list$2]');
-		$text = preg_replace($pattern, $replace, $this->__text);
+		$text = preg_replace($pattern, $replace, $this->_text);
 		preg_match_all('/(\\[nested]([\\s\\S]*)\\[\/nested])/', $text, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
@@ -731,20 +731,20 @@ class BbcodeParser implements ParserInterface {
 				$text = str_replace($result[0][$i], str_replace("\r\n", " ", $result[1][$i]), $text);
 			}
 		}
-		$this->__preparsed = $text;
+		$this->_preparsed = $text;
 	}
 
-	function __parent($out, $in) {
-		if (!isset($this->__tags[$in]['parent']) || ($this->__tags[$in]['parent'] == 'all')) {
+	protected function _parent($out, $in) {
+		if (!isset($this->_tags[$in]['parent']) || ($this->_tags[$in]['parent'] == 'all')) {
 			return false;
 		}
-		$ar = explode('^', $this->__tags[$in]['parent']);
+		$ar = explode('^', $this->_tags[$in]['parent']);
 		$tags = explode(',', $ar[1]);
 		if ($ar[0] == 'none') {
 			if ($out && in_array($out, $tags)) {
 				return false;
 			}
-			return $this->__buildTag('[' . $tags[0] . ']');
+			return $this->_buildTag('[' . $tags[0] . ']');
 		}
 		if ($ar[0] == 'all' && $out && !in_array($out, $tags)) {
 
@@ -753,62 +753,62 @@ class BbcodeParser implements ParserInterface {
 		return true;
 	}
 
-	function __parse() {
-		$this->__preparsed = $this->__text;
-		$this->__basic();
+	protected function _parse() {
+		$this->_preparsed = $this->_text;
+		$this->_basic();
 		foreach ($this->filters as $filter) {
-			$this->__text = $this->__preparsed;
-			$method = '__' . $filter;
+			$this->_text = $this->_preparsed;
+			$method = '_' . $filter;
 			$this->$method();
 		}
-		$this->__stripTags();
-		$this->__decode($this->__preparsed);
-		$this->__buildTags();
-		$this->__validateTags();
-		$this->__buildOutput();
+		$this->_stripTags();
+		$this->_decode($this->_preparsed);
+		$this->_buildTags();
+		$this->_validateTags();
+		$this->_buildOutput();
 	}
 
-	function __reset() {
-		$this->__text = null;
-		$this->__parsed = null;
-		$this->__preparsed = null;
-		$this->__builtTags = array();
+	protected function _reset() {
+		$this->_text = null;
+		$this->_parsed = null;
+		$this->_preparsed = null;
+		$this->_builtTags = array();
 	}
 
-	function __stripTags() {
+	protected function _stripTags() {
 		if (get_magic_quotes_gpc()) {
-			$this->__preparsed = stripslashes($this->__preparsed);
+			$this->_preparsed = stripslashes($this->_preparsed);
 		}
-		$this->__preparsed = nl2br($this->__preparsed);
-		$this->__preparsed = str_replace(array("&amp;", "&lt;", "&gt;", "><br />", "]<br />"), array("&amp;amp;", "&amp;lt;", "&amp;gt;", ">", "]"), $this->__preparsed);
-		$this->__preparsed = preg_replace('#(&\#*\w+)[\x00-\x20]+;#u', "$1;", $this->__preparsed);
-		$this->__preparsed = preg_replace('#(&\#x*)([0-9A-F]+);*#iu', "$1$2;", $this->__preparsed);
-		$this->__preparsed = preg_replace('#(<[^>]+[\x00-\x20\"\'])(on|xmlns)[^>]*>#iUu', "$1>", $this->__preparsed);
-		$this->__preparsed = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu', '$1=$2nojavascript...', $this->__preparsed);
-		$this->__preparsed = preg_replace('#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu', '$1=$2novbscript...', $this->__preparsed);
-		$this->__preparsed = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*expression[\x00-\x20]*\([^>]*>#iU', "$1>", $this->__preparsed);
-		$this->__preparsed = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*behaviour[\x00-\x20]*\([^>]*>#iU', "$1>", $this->__preparsed);
-		$this->__preparsed = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iUu', "$1>", $this->__preparsed);
-		$this->__preparsed = preg_replace('#</*\w+:\w[^>]*>#i', "", $this->__preparsed);
+		$this->_preparsed = nl2br($this->_preparsed);
+		$this->_preparsed = str_replace(array("&amp;", "&lt;", "&gt;", "><br />", "]<br />"), array("&amp;amp;", "&amp;lt;", "&amp;gt;", ">", "]"), $this->_preparsed);
+		$this->_preparsed = preg_replace('#(&\#*\w+)[\x00-\x20]+;#u', "$1;", $this->_preparsed);
+		$this->_preparsed = preg_replace('#(&\#x*)([0-9A-F]+);*#iu', "$1$2;", $this->_preparsed);
+		$this->_preparsed = preg_replace('#(<[^>]+[\x00-\x20\"\'])(on|xmlns)[^>]*>#iUu', "$1>", $this->_preparsed);
+		$this->_preparsed = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu', '$1=$2nojavascript...', $this->_preparsed);
+		$this->_preparsed = preg_replace('#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iUu', '$1=$2novbscript...', $this->_preparsed);
+		$this->_preparsed = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*expression[\x00-\x20]*\([^>]*>#iU', "$1>", $this->_preparsed);
+		$this->_preparsed = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*behaviour[\x00-\x20]*\([^>]*>#iU', "$1>", $this->_preparsed);
+		$this->_preparsed = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iUu', "$1>", $this->_preparsed);
+		$this->_preparsed = preg_replace('#</*\w+:\w[^>]*>#i', "", $this->_preparsed);
 		do {
-			$oldstring = $this->__preparsed;
-			$this->__preparsed = preg_replace('#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i', "", $this->__preparsed);
-		} while ($oldstring != $this->__preparsed);
+			$oldstring = $this->_preparsed;
+			$this->_preparsed = preg_replace('#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i', "", $this->_preparsed);
+		} while ($oldstring != $this->_preparsed);
 	}
 
-	function __table() {
-		$this->__preparsed = preg_replace('/\\[table(\\s?.*)\\](.*)\\[\/table\\]/', "[table=\$2\$1][/table]", $this->__text);
+	protected function _table() {
+		$this->_preparsed = preg_replace('/\\[table(\\s?.*)\\](.*)\\[\/table\\]/', "[table=\$2\$1][/table]", $this->_text);
 	}
 
-	function __validateTags() {
+	protected function _validateTags() {
 		$newTags = array();
 		$openTags = array();
-		foreach ($this->__builtTags as $tag) {
+		foreach ($this->_builtTags as $tag) {
 			$previous = end($newTags);
 			if (trim($tag['text']) !== '') {
 				switch ($tag['type']) {
 					case 0:
-						if (($child = $this->__child(end($openTags), 'text')) && $child !== false && $child !== true) {
+						if (($child = $this->_child(end($openTags), 'text')) && $child !== false && $child !== true) {
 							$newTags[] = $child;
 							$openTags[] = $child['tag'];
 						}
@@ -819,7 +819,7 @@ class BbcodeParser implements ParserInterface {
 						$newTags[] = $tag;
 						break;
 					case 1:
-						if (!$this->__allowed(end($openTags), $tag['tag']) || ($parent = $this->__parent(end($openTags), $tag['tag'])) === true || ($child = $this->__child(end($openTags), $tag['tag'])) === true) {
+						if (!$this->_allowed(end($openTags), $tag['tag']) || ($parent = $this->_parent(end($openTags), $tag['tag'])) === true || ($child = $this->_child(end($openTags), $tag['tag'])) === true) {
 							$tag['type'] = 0;
 							if ($previous['type'] === 0) {
 								$tag['text'] = $previous['text'] . $tag['text'];
@@ -828,7 +828,7 @@ class BbcodeParser implements ParserInterface {
 						} else {
 							if ($parent) {
 								if ($tag['tag'] == end($openTags)) {
-									$newTags[] = $this->__buildTag('[/' . $tag['tag'] . ']');
+									$newTags[] = $this->_buildTag('[/' . $tag['tag'] . ']');
 									array_pop($openTags);
 								} else {
 									$newTags[] = $parent;
@@ -844,11 +844,11 @@ class BbcodeParser implements ParserInterface {
 						$newTags[] = $tag;
 						break;
 					case 2:
-						if (($tag['tag'] == end($openTags) || $this->__allowed(end($openTags), $tag['tag']))) {
+						if (($tag['tag'] == end($openTags) || $this->_allowed(end($openTags), $tag['tag']))) {
 							if (in_array($tag['tag'], $openTags)) {
 								$tmpOpenTags = array();
 								while (end($openTags) != $tag['tag']) {
-									$newTags[] = $this->__buildTag('[/' . end($openTags) . ']');
+									$newTags[] = $this->_buildTag('[/' . end($openTags) . ']');
 									$tmpOpenTags[] = end($openTags);
 									array_pop($openTags);
 								}
@@ -871,15 +871,15 @@ class BbcodeParser implements ParserInterface {
 			}
 		}
 		while (end($openTags)) {
-			$newTags[] = $this->__buildTag('[/' . end($openTags) . ']');
+			$newTags[] = $this->_buildTag('[/' . end($openTags) . ']');
 			array_pop($openTags);
 		}
-		$this->__builtTags = $newTags;
+		$this->_builtTags = $newTags;
 	}
 
 /**
  * Parse method used for parsing a BBCode text and generating Html
- * 
+ *
  * @param string $string text to convert
  * @param array $options Valid keys are:
  * 	- charset
@@ -887,21 +887,21 @@ class BbcodeParser implements ParserInterface {
  * 		It generates a messy markup adn can be disabled for users that want "classic" html <code> tags
  * @return string Parsed string
  */
-	function parse($string, $options = array()) {
+	public function parse($string, $options = array()) {
 		$defaults = array(
 			'charset' => 'UTF-8',
 			'highlight_code' => true);
 		extract(array_merge($defaults, $options));
 
 		$this->_codeHighlightingEnabled = $highlight_code;
-		
-		$this->__charset = $charset;
-		$this->__reset();
-		$this->__text = $string;
-		$this->__parse();
-		
-		$data = explode(self::$pageSeparator, $this->__parsed);
-		if (count($data) == 1) {
+
+		$this->_charset = $charset;
+		$this->_reset();
+		$this->_text = $string;
+		$this->_parse();
+
+		$data = explode(self::$pageSeparator, $this->_parsed);
+		if (count($data) === 1) {
 			// For compatibility reasons
 			$data = $data[0];
 		}
@@ -914,19 +914,19 @@ class BbcodeParser implements ParserInterface {
  * @param string
  * @param string
  */
-	function strip($string, $charset = 'UTF-8') {
-		$this->__charset = $charset;
-		$this->__reset();
-		$this->__text = $string;
-		preg_match_all('/(\\[.*])([\\s\\S]*?)(\\[\/.*])/i', $this->__text, $result, PREG_PATTERN_ORDER);
+	public function strip($string, $charset = 'UTF-8') {
+		$this->_charset = $charset;
+		$this->_reset();
+		$this->_text = $string;
+		preg_match_all('/(\\[.*])([\\s\\S]*?)(\\[\/.*])/i', $this->_text, $result, PREG_PATTERN_ORDER);
 		if (!empty($result[0])) {
 			$count = count($result[0]);
 			for ($i = 0; $i < $count; $i++) {
-				$this->__text = str_replace($result[0][$i], str_replace("\r\n", " ", $result[2][$i]), $this->__text);
+				$this->_text = str_replace($result[0][$i], str_replace("\r\n", " ", $result[2][$i]), $this->_text);
 			}
 		}
-		$this->__preparsed = $this->__text;
-		$this->__stripTags();
-		return $this->__preparsed;
+		$this->_preparsed = $this->_text;
+		$this->_stripTags();
+		return $this->_preparsed;
 	}
 }

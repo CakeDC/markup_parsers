@@ -1,7 +1,5 @@
 # Markup Parsers Plugin for CakePHP #
 
-for cake 2.x
-
 This plugin offers a solution for working with different type of markup for you application. It offers both some markup parser implementations and a parser factory responsible for registering available parser classes and returning instances of them.
 
 It provides three different markup implementations:
@@ -72,12 +70,13 @@ To use any parser in your views just include the Parser helper into the $helpers
 
 And in your views
 
-        echo $this->Parser->parse($string, 'my_parser'); // the second parameter can be left blank ad will use 'markdown' as default      
-     
+        echo $this->Parser->parse($string, 'my_parser'); // the second parameter can be left blank ad will use 'markdown' as default
+
+
 ## Requirements ##
 
 * PHP version: PHP 5.2+
-* CakePHP version: Cakephp 2.0 Stable
+* CakePHP version: Cakephp 2.x Stable
 
 ## Support ##
 
@@ -100,14 +99,14 @@ Please feel free to contribute to the plugin with new issues, requests, unit tes
 
 ## License ##
 
-Copyright 2009-2011, [Cake Development Corporation](http://cakedc.com)
+Copyright 2009-2012, [Cake Development Corporation](http://cakedc.com)
 
 Licensed under [The MIT License](http://www.opensource.org/licenses/mit-license.php)<br/>
 Redistributions of files must retain the above copyright notice.
 
 ## Copyright ###
 
-Copyright 2009-2011<br/>
+Copyright 2009-2012<br/>
 [Cake Development Corporation](http://cakedc.com)<br/>
 1785 E. Sahara Avenue, Suite 490-423<br/>
 Las Vegas, Nevada 89104<br/>

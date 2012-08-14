@@ -103,7 +103,7 @@ class MarkdownParser implements ParserInterface {
  *
  * - stripHtml - remove any HTML before parsing.
  * - engine: default, markdown, markdown_extra
- * 
+ *
  * IDEAS
  * - elements: allow further elemens like video, latex, ... (use registerElement to register new stuff)
  *
@@ -116,22 +116,22 @@ class MarkdownParser implements ParserInterface {
 			'engine' => 'default',
 		);
 		$options = am($defaults, $options);
-		
+
 		if (!empty($options['stripHtml'])) {
 			$text = strip_tags($text);
 		}
-		
+
 		if ($options['engine'] == 'markdown_extra') {
 			App::import('Vendor', 'MarkupParsers.markdown/markdown');
 			$Markdown = new MarkdownExtra_Parser;
 			return trim($Markdown->transform($text));
-			
+
 		} elseif ($options['engine'] == 'markdown') {
 			App::import('Vendor', 'MarkupParsers.markdown/markdown');
 			$Markdown = new Markdown_Parser;
 			return trim($Markdown->transform($text));
 		}
-		
+
 		$this->_placeHolders = array();
 		$text = str_replace("\r\n", "\n", $text);
 		$text = str_replace("\t", str_repeat(' ', $this->spacesPerTab), $text);
