@@ -430,7 +430,7 @@ class MarkdownParser implements ParserInterface {
  * @return string Transformed text.
  */
 	protected function _doAutoLink($text) {
-		$wwwPattern = '/((https?:\/\/|www\.)[^\s]+)(\s|$)/';
+		$wwwPattern = '/((https?:\/\/|www\.)[^\r\n\s]+)/';
 		return preg_replace_callback($wwwPattern, array($this, '_autoLinkHelper'), $text);
 	}
 
@@ -441,9 +441,9 @@ class MarkdownParser implements ParserInterface {
  */
 	protected function _autoLinkHelper($matches) {
 		if ($matches[2] == 'www.') {
-			return sprintf('<a href="http://%s">%s</a> ', $matches[1], $matches[1]);
+			return sprintf('<a href="http://%s">%s</a>', $matches[1], $matches[1]);
 		}
-		return sprintf('<a href="%s">%s</a> ', $matches[1], $matches[1]);
+		return sprintf('<a href="%s">%s</a>', $matches[1], $matches[1]);
 	}
 
 /**

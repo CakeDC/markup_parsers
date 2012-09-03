@@ -185,6 +185,11 @@ TEXT;
 		$result = $this->Parser->parse($text);
 		$expected = '<p>Normal text <a href="http://www.foo.com" title="some title">test link</a> normal code normal.</p>';
 		$this->assertTextEquals($expected, $result);
+
+		$text = "Normal text www.foo.com\nNormal text on new line";
+		$result = $this->Parser->parse($text);
+		$expected = "<p>Normal text <a href=\"http://www.foo.com\">www.foo.com</a>\nNormal text on new line</p>";
+		$this->assertTextEquals($expected, $result);
 	}
 
 /**
