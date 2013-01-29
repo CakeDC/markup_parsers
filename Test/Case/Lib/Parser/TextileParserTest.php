@@ -58,12 +58,11 @@ TEXT;
 	<ul>
 		<li>One</li>
 		<li>Two</li>
-	</ul>
-	<ul>
 		<li>Three</li>
 	</ul>
 HTML;
 		$result = $this->Parser->parse($testText);
+        //debug($result); die();
 		$this->assertTextEquals($expected, $result);
 	}
 
