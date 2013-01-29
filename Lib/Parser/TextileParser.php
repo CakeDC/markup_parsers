@@ -44,8 +44,8 @@ class TextileParser implements ParserInterface {
  * @return string Parsed HTML
  */
 	public function parse($text, $options = array()) {
-		
-        if (!empty($options['restricted'])) {
+        
+        if (empty($options['restricted'])) {
             $defaults = array(
                 'stripHtml' => false,
                 'restricted' => false,
@@ -77,9 +77,12 @@ class TextileParser implements ParserInterface {
         App::import('Vendor', 'MarkupParsers.textile/textile');
         $Textile = new Textile_Parser;
         if (!$options['restricted']){
-            return trim($Textile->TextileThis($text, $options['lite'], $options['encode'], $options['noimage'], $options['strict'], $options['rel']));
+            $text = trim($Textile->TextileThis($text, $options['lite'], $options['encode'], $options['noimage'], $options['strict'], $options['rel']));
+            return $text;
+            
         }
         else {
+            
             return trim($Textile->TextileRestricted($text, $options['lite'], $options['noimage'], $options['rel']));
         }
 		
