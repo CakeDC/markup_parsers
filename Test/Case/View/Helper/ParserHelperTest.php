@@ -39,7 +39,10 @@ class ParserHelperTest extends CakeTestCase {
 				'className' => 'MarkupParsers.Bbcode'),
 			'html' => array(
 				'name' => 'Html',
-				'className' => 'MarkupParsers.Html')));
+				'className' => 'MarkupParsers.Html'),
+			'textile' => array(
+				'name' => 'Textile',
+				'className' => 'MarkupParsers.Textile')));
 
 		$controller = null;
 		$View = new View($controller);
@@ -65,6 +68,10 @@ class ParserHelperTest extends CakeTestCase {
 	public function testParse() {
 		$string = '# Foobar';
 		$result = $this->Parser->parse($string, 'markdown');
+		$this->assertEquals(array('<h1>Foobar</h1>'), $result);
+		
+        $string = 'h1. Foobar';
+		$result = $this->Parser->parse($string, 'textile');
 		$this->assertEquals(array('<h1>Foobar</h1>'), $result);
 
 		$string = '[b]Foobar[/b]';
