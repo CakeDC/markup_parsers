@@ -53,7 +53,11 @@ class ParserRegistry {
 				'className' => 'MarkupParsers.Bbcode'),
 			'html' => array(
 				'name' => 'Html',
-				'className' => 'MarkupParsers.Html')
+				'className' => 'MarkupParsers.Html'),
+            'textile' => array(
+                'name' => 'Textile',
+                'className' => 'MarkupParsers.Textile'
+            )
 		);
 
 		if (empty(self::$_availableParsers)) {
