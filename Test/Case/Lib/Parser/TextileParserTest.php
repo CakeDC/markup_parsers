@@ -250,6 +250,48 @@ HTML;
         $this->assertTextNotContains('height="', $result, '', true);
     }
     
+    public function testMarkupFormat(){
+        $this->skipUnless(function_exists('json_decode'));
+        $testsJsonString = @file_get_contents(dirname(__FILE__) . DS . 'TextileFormatTests.json');
+        $this->skipUnless($testsJsonString);
+        $this->tests = json_decode($testsJsonString, true);
+        $this->skipUnless(is_array($this->tests));
+        
+        
+        foreach($this->tests as $message => $test){
+            
+            if (is_string($test)) { debug($test); die(); }
+            $result = $this->Parser->parse($test['input']);
+            $expect = $test['expect'];
+            
+            //mangle whitespace to match tests
+            $result = preg_replace('/^[^\S\n]+/m', '', $result);
+            $expect = preg_replace('/^[^\S\n]+/m', '', $expect);
+            
+            //trim ending newline in expect
+            $expect = rtrim($expect, "\n\r");
+            
+            if (!empty($test['special'])){
+                switch ($test['special']){
+                    case 'strip_rand':
+                        $regex = '/
+                            (?<= noteref|noteid|note|fnrev|fn)
+                            \d[^"]+
+                            (?=")
+                            /mx';
+                        $result = preg_replace($regex, '', $result);
+                        break;
+                    case 'skip':
+                        continue 2;
+                        break;
+                }
+            }
+            
+            $this->assertTextEquals($expect, $result, $message);
+        }
+        
+    }
+    
     
     /**
      * Helper method for image testing
