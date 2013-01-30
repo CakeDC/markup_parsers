@@ -317,7 +317,7 @@ Ordered List Start & Continuation:
 /**
  * Class to allow simple assignment to members of the internal data array
  **/
-class TextileBag
+class Textile_TextileBag
 {
     protected $data;
 
@@ -360,7 +360,7 @@ class TextileBag
  * $img = new TextileTag('img')->class('big blue')->src('images/elephant.jpg');
  * echo $img;
  **/
-class TextileTag extends TextileBag
+class Textile_TextileTag extends Textile_TextileBag
 {
     protected $tag;
     protected $selfclose;
@@ -1107,7 +1107,7 @@ class Textile_Parser
      */
     protected function newTag($name, $atts, $selfclosing = true)
     {
-        return new TextileTag($name, $atts, $selfclosing);
+        return new Textile_TextileTag($name, $atts, $selfclosing);
     }
 
 
