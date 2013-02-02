@@ -4,7 +4,7 @@ for cake 2.x
 
 This plugin offers a solution for working with different type of markup for you application. It offers both some markup parser implementations and a parser factory responsible for registering available parser classes and returning instances of them.
 
-It provides three different markup implementations:
+It provides four different markup implementations:
 
 ## BBcode Parser ##
 
@@ -20,11 +20,29 @@ Supports regular markdown syntax with a few exceptions and additions:
     * Setext style headers are not supported, only ATX style headers work.
     * Block quotes are not implemented at this time.
 
-As this class was original intended to parse functions doc blocks, it has some additional syntax items:
+As this class was originally intended to parse functions doc blocks, it has some additional syntax items:
 
     * Class::method() links. These are links to other class + methods in your code base.
     * Class::$property links. These are links to other class properties in your code base.
     * Code blocks - Code blocks can be indicated with either {{{ code }}} or @@@ code @@@ or indented.
+
+## Textile Parser ##
+
+Supports regular Textile markup language (v2.5) syntax. All standard Textile options and features are available except Textile's automatic image dimensions feature, which are currently not implemented due to CakePHP's rewrite scheme and image locations.
+
+Options list:
+
+    * doctype (string) - 'xhtml' or 'html5'
+    * stripHtml (bool) - Strips tags before parsing
+    * restricted (bool) - Sanitizes the input string against malicious input (uses Textile::TextileRestricted())
+    * lite (bool) - Switches to Lite mode
+    * encode (bool) - deprecated
+    * noimage (bool) - If true, does not parse images
+    * strict (bool) - If false, strips whitespace before parsing
+    * rel (string) - Relationship attribute applied to generated links
+    * dimensionless_images (bool) - If true, does not generate width and height attributes to images
+    * relative_image_prefix (string) - Sets the base url for images for all relative images
+    * symbols (array) - Array of custom replacements for html-encoded symbols
 
 ## Html ##
 
@@ -34,7 +52,7 @@ This parser splits the input string in multiple pages using the `<!--Page Separa
 
 ## The ParserRegistry Class##
 
-Every parser needs to be configured so they can be instantiated by the helper using the ParserRegistry class. To configure the parsers your are going to use in tour app put use the Configure class to list them.
+Every parser needs to be configured so they can be instantiated by the helper using the ParserRegistry class. To configure the parsers you are going to use in your app use the Configure class to list them.
 
         Configure::write('Parsers.markdown' => array(
 			'name' => 'Markdown',
