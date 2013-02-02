@@ -172,17 +172,18 @@ HTML;
     display: block;
     height: 200px;
 ">This link is accidental</a>
-"But this one is on purpose":/reference.html
+"But this one is on purpose and has ambiguous Math stuff like 3<abs(-4) and 3>-4 or 4<>4":/reference.html
 TEXT;
-        $expected = <<<HTML
+        $expect = <<<HTML
 This link is accidental
-<a href="/reference.html">But this one is on purpose</a>
+<a href="/reference.html">But this one is on purpose and has ambiguous Math stuff like 3-4 or 4&lt;&gt;4</a>
 HTML;
         $options = array(
             'stripHtml' => true
         );
         $result = $this->Parser->parse($mixedInput, $options);
-        $this->assertTextEquals($expected, $result);
+         
+        $this->assertTextEquals($expect, $result);
     }
     
     
@@ -285,6 +286,11 @@ HTML;
                         continue 2;
                         break;
                 }
+            }
+            if ($expect !== $result) {
+                debug($expect);
+                debug($result);
+                die();
             }
             
             $this->assertTextEquals($expect, $result, $message);

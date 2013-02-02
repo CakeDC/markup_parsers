@@ -110,9 +110,12 @@ class TextileParser implements ParserInterface {
             $defaults['rel'] = 'nofollow';
         }
 		$options = array_merge($defaults, $options);
+        
 
 		if (!empty($options['stripHtml'])) {
-			$text = strip_tags($text);
+            // using regex instead of strip_tags, which is greedy for ">"
+            $pattern = '/<\/{0,1}(?:[A-Za-z]+)[^>]*>/m';
+            $text = preg_replace($pattern, '', $text);
 		}
         
         // New Textile instance
