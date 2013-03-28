@@ -291,18 +291,18 @@ class BbcodeParser implements ParserInterface {
 	}
 
 	protected function _allowed($out, $in) {
-		if (!$out || ($this->_tags[$out]['allowed'] == 'all')) {
+		if (!$out || ($this->_tags[$out]['allowed'] === 'all')) {
 			return true;
 		}
-		if ($this->_tags[$out]['allowed'] == 'none') {
+		if ($this->_tags[$out]['allowed'] === 'none') {
 			return false;
 		}
 		$ar = explode('^', $this->_tags[$out]['allowed']);
 		$tags = explode(',', $ar[1]);
-		if ($ar[0] == 'none' && in_array($in, $tags)) {
+		if ($ar[0] === 'none' && in_array($in, $tags)) {
 			return true;
 		}
-		if ($ar[0] == 'all' && in_array($in, $tags)) {
+		if ($ar[0] === 'all' && in_array($in, $tags)) {
 			return false;
 		}
 		return false;
@@ -335,7 +335,7 @@ class BbcodeParser implements ParserInterface {
 					}
 					foreach ($tag['attributes'] as $key => $value) {
 						$value = preg_replace('#(activex|applet|about|chrome|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base):#is', "\\1&#058;", $value);
-						if (($this->quote == 'nothing') || (($this->quote == 'strings') && is_numeric($v))) {
+						if (($this->quote === 'nothing') || (($this->quote === 'strings') && is_numeric($v))) {
 							$this->_parsed .= ' ' . sprintf($this->_tags[$tag['tag']]['attributes'][$key], $value, '');
 						} else {
 							$this->_parsed .= ' ' . sprintf($this->_tags[$tag['tag']]['attributes'][$key], $value, $quote);
@@ -357,7 +357,7 @@ class BbcodeParser implements ParserInterface {
 
 	protected function _buildTag($string) {
 		$tag = array('text' => $string, 'attributes' => array());
-		if (substr($string, 1, 1) == '/') {
+		if (substr($string, 1, 1) === '/') {
 			$tag['tag'] = strtolower(substr($string, 2, strlen($string) - 3));
 			if (!in_array($tag['tag'], array_keys($this->_tags))) {
 				return false;
@@ -551,7 +551,7 @@ class BbcodeParser implements ParserInterface {
 		}
 		$ar = explode('^', $this->_tags[$out]['child']);
 		$tags = explode(',', $ar[1]);
-		if ($ar[0] == 'none') {
+		if ($ar[0] === 'none') {
 			if ($in && in_array($in, $tags)) {
 				return false;
 			}
@@ -735,18 +735,18 @@ class BbcodeParser implements ParserInterface {
 	}
 
 	protected function _parent($out, $in) {
-		if (!isset($this->_tags[$in]['parent']) || ($this->_tags[$in]['parent'] == 'all')) {
+		if (!isset($this->_tags[$in]['parent']) || ($this->_tags[$in]['parent'] === 'all')) {
 			return false;
 		}
 		$ar = explode('^', $this->_tags[$in]['parent']);
 		$tags = explode(',', $ar[1]);
-		if ($ar[0] == 'none') {
+		if ($ar[0] === 'none') {
 			if ($out && in_array($out, $tags)) {
 				return false;
 			}
 			return $this->_buildTag('[' . $tags[0] . ']');
 		}
-		if ($ar[0] == 'all' && $out && !in_array($out, $tags)) {
+		if ($ar[0] === 'all' && $out && !in_array($out, $tags)) {
 
 			return false;
 		}
