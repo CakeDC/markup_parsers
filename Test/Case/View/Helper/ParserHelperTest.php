@@ -70,7 +70,7 @@ class ParserHelperTest extends CakeTestCase {
 		$result = $this->Parser->parse($string, 'markdown');
 		$this->assertEquals(array('<h1>Foobar</h1>'), $result);
 		
-        $string = 'h1. Foobar';
+		$string = 'h1. Foobar';
 		$result = $this->Parser->parse($string, 'textile');
 		$this->assertEquals(array('<h1>Foobar</h1>'), $result);
 

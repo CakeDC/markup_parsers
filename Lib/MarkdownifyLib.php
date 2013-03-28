@@ -27,7 +27,7 @@ class MarkdownifyLib {
 	}
 
 	public function parseString($html, $options = array()) {
-		if ($this->settings['engine'] == 'extra') {
+		if ($this->settings['engine'] === 'extra') {
 			$Parser = new Markdownify_Extra();
 		} else {
 			$Parser = new Markdownify();
