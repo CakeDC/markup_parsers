@@ -9,27 +9,24 @@
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
+App::uses('Controller', 'Controller');
 App::uses('View', 'View');
-App::uses('Helper', 'View/Helper');
-App::uses('AppHelper', 'View/Helper');
-
-App::import('Helper', array('MarkupParsers.Parser'));
+App::uses('ParserHelper', 'MarkupParsers.View/Helper');
 
 /**
  * Parser helper test case
  *
- * @package markup_parsers
- * @subpackage markup_parsers.tests.cases.libs
  */
 class ParserHelperTest extends CakeTestCase {
 
 /**
- * setUp method
+ * SetUp method
  *
- * @access public
  * @return void
  */
-	public function setup() {
+	public function setUp() {
+		parent::setUp();
+
 		Configure::write('Parsers', array(
 			'markdown' => array(
 				'name' => 'Markdown',
@@ -44,20 +41,8 @@ class ParserHelperTest extends CakeTestCase {
 				'name' => 'Textile',
 				'className' => 'MarkupParsers.Textile')));
 
-		$controller = null;
-		$View = new View($controller);
+		$View = new View(new Controller());
 		$this->Parser = new ParserHelper($View);
-	}
-
-/**
- * tearDown method
- *
- * @access public
- * @return void
- */
-	public function tearDown() {
-		ClassRegistry::flush();
-		unset($this->Parser);
 	}
 
 /**
@@ -69,7 +54,7 @@ class ParserHelperTest extends CakeTestCase {
 		$string = '# Foobar';
 		$result = $this->Parser->parse($string, 'markdown');
 		$this->assertEquals(array('<h1>Foobar</h1>'), $result);
-		
+
 		$string = 'h1. Foobar';
 		$result = $this->Parser->parse($string, 'textile');
 		$this->assertEquals(array('<h1>Foobar</h1>'), $result);

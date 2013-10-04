@@ -34,8 +34,6 @@ App::uses('ParserInterface', 'MarkupParsers.Lib');
  * Several patterns and ideas like list processing were adopted from
  * MarkdownSharp (http://code.google.com/p/markdownsharp/)
  *
- * @package markup_parsers
- * @subpackage markup_parsers.libs
  */
 class MarkdownParser implements ParserInterface {
 
@@ -54,7 +52,7 @@ class MarkdownParser implements ParserInterface {
 	protected $_placeHolders = array();
 
 /**
- * indented code block flag used to signal an outdent
+ * Indented code block flag used to signal an outdent
  *
  * @var boolean
  */
@@ -75,14 +73,14 @@ class MarkdownParser implements ParserInterface {
 	public $spacesPerTab = 4;
 
 /**
- * pattern for ordered lists
+ * Pattern for ordered lists
  *
  * @var string
  */
 	protected $_orderedListPattern = '\d+\.';
 
 /**
- * unordered list marker
+ * Unordered list marker
  *
  * @var string
  */
@@ -200,7 +198,7 @@ class MarkdownParser implements ParserInterface {
 	}
 
 /**
- * code block assist
+ * Code block assist
  *
  * @return string
  */
@@ -252,7 +250,16 @@ class MarkdownParser implements ParserInterface {
  * @return string Transformed text
  */
 	protected function _doHorizontalRule($text) {
-		$hrPattern = '/\n+([-_*])(?>[ ]*\1){2,}\n+/';
+		$hrPattern = '{
+				^[ ]{0,3}	# Leading space
+				([-*_])		# $1: First marker
+				(?>			# Repeated marker group
+					[ ]{0,2}	# Zero, one, or two spaces.
+					\1			# Marker character
+				){2,}		# Group repeated at least twice
+				[ ]*		# Tailing spaces
+				$			# End of line.
+			}mx';
 		return preg_replace($hrPattern, "\n\n" . $this->_makePlaceHolder("<hr />") . "\n\n", $text);
 	}
 
@@ -287,7 +294,7 @@ class MarkdownParser implements ParserInterface {
  */
 	protected function _processList($matches) {
 		$listType = preg_match('/'. $this->_orderedListPattern . '/', $matches[3]) ? 'ol' : 'ul';
-		$markerPattern = $listType == 'ol' ? $this->_orderedListPattern : $this->_unorderedListPattern;
+		$markerPattern = $listType === 'ol' ? $this->_orderedListPattern : $this->_unorderedListPattern;
 
 		$items = $this->_processListItems($matches[1], $markerPattern);
 
@@ -440,7 +447,7 @@ class MarkdownParser implements ParserInterface {
  * @return void
  */
 	protected function _autoLinkHelper($matches) {
-		if ($matches[2] == 'www.') {
+		if ($matches[2] === 'www.') {
 			return sprintf('<a href="http://%s">%s</a>', $matches[1], $matches[1]);
 		}
 		return sprintf('<a href="%s">%s</a>', $matches[1], $matches[1]);

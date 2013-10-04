@@ -14,13 +14,11 @@ App::uses('AppHelper', 'View/Helper');
 /**
  * Parser Helper
  *
- * @package MarkupParser
- * @subpackage MarkupParser.View.Helper
  */
 class ParserHelper extends AppHelper {
 
 /**
- * Parse text from some plain text format
+ * Parse text from some plain text format.
  *
  * @param string $text Text for parsing
  * @param string $format Format type

@@ -14,13 +14,11 @@ App::uses('MarkdownParser', 'MarkupParsers.Parser');
 /**
  * HtmlParser test case
  *
- * @package markup_parsers
- * @subpackage markup_parsers.tests.cases.libs
  */
 class MarkdownParserTest extends CakeTestCase {
 
 /**
- * setUp method
+ * SetUp method
  *
  * @return void
  */
@@ -29,7 +27,7 @@ class MarkdownParserTest extends CakeTestCase {
 	}
 
 /**
- * tearDown method
+ * TearDown method
  *
  * @return void
  */
@@ -42,7 +40,6 @@ class MarkdownParserTest extends CakeTestCase {
  * testParse
  *
  * @return void
- * @access public
  */
 	public function testParse() {
 		$testText = <<<TEXT
@@ -68,7 +65,7 @@ HTML;
 	}
 
 /**
- * test emphasis and bold elements.
+ * Test emphasis and bold elements.
  *
  * @return void
  */
@@ -105,7 +102,7 @@ HTML;
 	}
 
 /**
- * test inline code elements.
+ * Test inline code elements.
  *
  * @return void
  */
@@ -132,7 +129,7 @@ HTML;
 	}
 
 /**
- * test inline code elements.
+ * Test inline code elements.
  *
  * @return void
  */
@@ -167,11 +164,11 @@ HTML;
 TEXT;
 		$result = $this->Parser->parse($text);
 		preg_match_all('/<a href=/', $result, $matches);
-		$this->assertIdentical(count($matches[0]), 4);
+		$this->assertSame(4, count($matches[0]));
 	}
 
 /**
- * test inline links
+ * Test inline links
  *
  * @return void
  */
@@ -193,7 +190,7 @@ TEXT;
 	}
 
 /**
- * test entity conversion
+ * Test entity conversion
  *
  * @return void
  */
@@ -231,7 +228,7 @@ HTML;
 	}
 
 /**
- * test horizontal rules.
+ * Test horizontal rules.
  *
  * @return void
  */
@@ -272,7 +269,7 @@ TEXT;
 	}
 
 /**
- * test multiline code blocks
+ * Test multiline code blocks
  *
  * @return void
  */
@@ -321,7 +318,7 @@ HTML;
 	}
 
 /**
- * test two code blocks with delimiters.
+ * Test two code blocks with delimiters.
  *
  * @return void
  */
@@ -364,7 +361,7 @@ HTML;
 	}
 
 /**
- * test that code blocks work with no newlines
+ * Test that code blocks work with no newlines
  *
  * @return void
  */
@@ -388,7 +385,7 @@ HTML;
 	}
 
 /**
- * test indented code blocks
+ * Test indented code blocks
  *
  * @return void
  */
@@ -396,7 +393,7 @@ HTML;
 		$text = <<<TEXT
 this is some
 
-	function test() {
+	public function test() {
 		echo '<test>';
 	}
 
@@ -405,7 +402,7 @@ TEXT;
 		$expected = <<<HTML
 <p>this is some</p>
 
-<pre><code>function test() {
+<pre><code>public function test() {
     echo '&lt;test&gt;';
 }</code></pre>
 
@@ -417,7 +414,7 @@ HTML;
 		$text = <<<TEXT
 this is some
 
-	function test() {
+	public function test() {
 		echo '<test>';
 	}
 
@@ -426,7 +423,7 @@ TEXT;
 		$expected = <<<HTML
 <p>this is some</p>
 
-<pre><code>function test() {
+<pre><code>public function test() {
     echo '&lt;test&gt;';
 }</code></pre>
 
@@ -438,7 +435,7 @@ HTML;
 		$text = <<<TEXT
 this is some
 
-	function test() {
+	public function test() {
 		echo '<test>';
 	}
 
@@ -449,7 +446,7 @@ TEXT;
 		$expected = <<<HTML
 <p>this is some</p>
 
-<pre><code>function test() {
+<pre><code>public function test() {
     echo '&lt;test&gt;';
 }
 
@@ -517,7 +514,7 @@ HTML;
 	}
 
 /**
- * test that lists ending on the last line of the text are handled properly
+ * Test that lists ending on the last line of the text are handled properly
  *
  * @return void
  */
@@ -601,7 +598,7 @@ HTML;
 	}
 
 /**
- * test nested one line lists
+ * Test nested one line lists
  *
  * @return void
  */
@@ -674,7 +671,7 @@ HTML;
 	}
 
 /**
- * test mixed lists.
+ * Test mixed lists.
  *
  * @return void
  */
@@ -721,7 +718,7 @@ this is some
 
 	##
 	## This should not render as a heading
-	function test() {
+	public function test() {
 		echo '<test>';
 	}
 
@@ -732,7 +729,7 @@ TEXT;
 
 <pre><code>##
 ## This should not render as a heading
-function test() {
+public function test() {
     echo '&lt;test&gt;';
 }</code></pre>
 
@@ -839,6 +836,5 @@ HTML;
 		$result = $this->Parser->parse($testText, array('engine'=>'markdown_extra'));
 		$this->assertTextEquals($expected, $result);
 	}
-
 
 }

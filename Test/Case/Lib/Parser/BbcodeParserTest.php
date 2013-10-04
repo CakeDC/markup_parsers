@@ -14,13 +14,11 @@ App::uses('BbcodeParser', 'MarkupParsers.Parser');
 /**
  * HtmlParser test case
  *
- * @package markup_parsers
- * @subpackage markup_parsers.tests.cases.libs
  */
 class BbcodeParserTest extends CakeTestCase {
 
 /**
- * setUp method
+ * SetUp method
  *
  * @return void
  */
@@ -29,7 +27,7 @@ class BbcodeParserTest extends CakeTestCase {
 	}
 
 /**
- * tearDown method
+ * TearDown method
  *
  * @return void
  */
@@ -42,7 +40,6 @@ class BbcodeParserTest extends CakeTestCase {
  * testParse
  *
  * @return void
- * @access public
  */
 	public function testParse() {
 		$testText = <<<TEXT
@@ -62,10 +59,9 @@ HTML;
 	}
 
 /**
- * test Parse BBCode with a not closed tag
+ * Test Parse BBCode with a not closed tag
  *
  * @return void
- * @access public
  */
 	public function testParseNotClosedTags() {
 		$testText = <<<TEXT

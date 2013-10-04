@@ -12,8 +12,6 @@
 /**
  * Parser Interface needed to be implemented by any Parser
  *
- * @package markup_parsers
- * @subpackage markup_parsers.libs
  */
 interface ParserInterface {
 

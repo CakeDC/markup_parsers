@@ -19,8 +19,6 @@
  *			'className' => 'MyPlugin.MyParser'
  *		))
  *
- * @package markup_parsers
- * @subpackage markup_parsers.libs
  */
 class ParserRegistry {
 
@@ -98,7 +96,7 @@ class ParserRegistry {
 			App::uses($class, $location);
 
 			if (!class_exists($class)) {
-				throw new Exception(__d('markup_parsers', 'Invalid Parser', true));
+				throw new Exception(__d('markup_parsers', 'Invalid Parser'));
 			}
 			self::$_parsers[$parser] = new $class();
 		}

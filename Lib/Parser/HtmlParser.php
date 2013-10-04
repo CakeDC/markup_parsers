@@ -15,8 +15,6 @@ App::uses('Sanitize', 'Utility');
 /**
  * Html Parser
  *
- * @package markup_parsers
- * @subpackage markup_parsers.libs
  */
 class HtmlParser implements ParserInterface {
 

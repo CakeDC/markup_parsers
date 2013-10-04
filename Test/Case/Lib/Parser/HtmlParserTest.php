@@ -14,13 +14,11 @@ App::uses('HtmlParser', 'MarkupParsers.Parser');
 /**
  * HtmlParser test case
  *
- * @package markup_parsers
- * @subpackage markup_parsers.tests.cases.libs
  */
 class HtmlParserTest extends CakeTestCase {
 
 /**
- * setUp method
+ * SetUp method
  *
  */
 	public function setup() {
@@ -28,7 +26,7 @@ class HtmlParserTest extends CakeTestCase {
 	}
 
 /**
- * tearDown method
+ * TearDown method
  *
  */
 	public function tearDown() {
@@ -65,7 +63,7 @@ HTML;
 	}
 
 /**
- * testParse text containing some code
+ * TestParse text containing some code
  *
  * @return void
  */
