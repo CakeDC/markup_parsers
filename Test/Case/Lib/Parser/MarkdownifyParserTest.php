@@ -1,24 +1,39 @@
 <?php
-App::uses('MarkdownifyLib', 'MarkupParsers.Lib');
+
+App::uses('MarkdownifyParser', 'MarkupParsers.Parser');
 
 /**
- * 2012-02-08 ms
+ * HtmlParser test case
+ *
  */
-class MarkdownifyLibTest extends CakeTestCase {
+class MarkdownifyParserTest extends CakeTestCase {
 
-	public $Markdownify;
-
-
+/**
+ * SetUp method
+ *
+ * @return void
+ */
 	public function setUp() {
 		parent::setUp();
 
-		$this->Markdownify = new MarkdownifyLib();
+		$this->Parser = new MarkdownifyParser();
 	}
 
-	public function testObject() {
-		$this->assertTrue(is_a($this->Markdownify, 'MarkdownifyLib'));
+/**
+ * TearDown method
+ *
+ * @return void
+ */
+	public function tearDown() {
+		ClassRegistry::flush();
+		unset($this->Parser);
 	}
 
+/**
+ * Basic parsing
+ *
+ * @return void
+ */
 	public function testBasicParsing() {
 		$html = <<<HTML
 <h1>header one</h1>
@@ -40,7 +55,7 @@ HTML;
 		$expected = <<<TEXT
 # header one
 
-Some Text 
+Some Text{space}
 
 ## header two
 
@@ -49,16 +64,24 @@ Some Text
 *   Three
 TEXT;
 
-		$res = $this->Markdownify->parseString($html);
+		$res = $this->Parser->parse($html);
+		$expected = str_replace('{space}', ' ', $res);
 		$this->assertTextEquals($expected, $res);
 	}
 
-	// not quite the expected result, though...
+
+/**
+ * Complex parsing
+ *
+ * FIXME: not quite the expected result, though...
+ *
+ * @return void
+ */
 	public function testComplexParsing() {
 		$html = <<<HTML
 <h1>header one</h1>
 
-Some Text 
+Some Text
 
 <h2>header two</h2>
 <h3>header three</h3>
@@ -73,9 +96,9 @@ Some Text
 <p>And some <a href="http://www.google.com">google-link</a>.</p>
 HTML;
 
-		// not quite the expected result, though (text without p is problematic)...
+		// Not quite the expected result, though (text without p is problematic)...
 		$expected = <<<TEXT
-# header one Some Text 
+# header one Some Text{space}
 
 ## header two
 
@@ -94,7 +117,8 @@ And some [google-link][1].
  [1]: http://www.google.com
 TEXT;
 
-		$res = $this->Markdownify->parseString($html);
+		$res = $this->Parser->parse($html);
+		$expected = str_replace('{space}', ' ', $res);
 		$this->assertTextEquals($expected, $res);
 	}
 

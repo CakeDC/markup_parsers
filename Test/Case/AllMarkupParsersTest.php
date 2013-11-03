@@ -1,19 +1,20 @@
 <?php
 /**
- * group test - MarkupParsers
+ * Group test - MarkupParsers
  */
-class AllPluginTestsTest extends PHPUnit_Framework_TestSuite {
+class AllMarkupParsersTestsTest extends PHPUnit_Framework_TestSuite {
 
 	/**
-	 * suite method, defines tests for this suite.
+	 * Suite method, defines tests for this suite.
 	 *
 	 * @return void
 	 */
 	public static function suite() {
-		$Suite = new CakeTestSuite('All Plugin tests');
+		$Suite = new CakeTestSuite('All MarkupParsers tests');
 		$path = dirname(__FILE__);
 		$Suite->addTestDirectory($path . DS . 'View' . DS . 'Helper');
 		$Suite->addTestDirectory($path . DS . 'Lib' . DS . 'Parser');
 		return $Suite;
 	}
+
 }

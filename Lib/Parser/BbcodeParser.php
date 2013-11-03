@@ -14,8 +14,6 @@ App::uses('ParserInterface', 'MarkupParsers.Lib');
 /**
  * Bbcode Parser
  *
- * @package markup_parsers
- * @subpackage markup_parsers.libs
  */
 class BbcodeParser implements ParserInterface {
 
@@ -341,13 +339,13 @@ class BbcodeParser implements ParserInterface {
 							$this->_parsed .= ' ' . sprintf($this->_tags[$tag['tag']]['attributes'][$key], $value, $quote);
 						}
 					}
-					if ($this->_tags[$tag['tag']]['close'] == '' && $this->strict === true) {
+					if ($this->_tags[$tag['tag']]['close'] === '' && $this->strict === true) {
 						$this->_parsed .= ' /';
 					}
 					$this->_parsed .= '>';
 					break;
 				case 2:
-					if ($this->_tags[$tag['tag']]['close'] != '') {
+					if ($this->_tags[$tag['tag']]['close'] !== '') {
 						$this->_parsed .= '</' . $this->_tags[$tag['tag']]['close'] . '>';
 					}
 					break;
@@ -546,7 +544,7 @@ class BbcodeParser implements ParserInterface {
 	}
 
 	protected function _child($out, $in) {
-		if (!isset($this->_tags[$out]['child']) || ($this->_tags[$out]['child'] == 'all')) {
+		if (!isset($this->_tags[$out]['child']) || ($this->_tags[$out]['child'] === 'all')) {
 			return false;
 		}
 		$ar = explode('^', $this->_tags[$out]['child']);
@@ -557,7 +555,7 @@ class BbcodeParser implements ParserInterface {
 			}
 			return $this->_buildTag('[' . $tags[0] . ']');
 		}
-		if ($ar[0] == 'all' && $in && !in_array($in, $tags)) {
+		if ($ar[0] === 'all' && $in && !in_array($in, $tags)) {
 			return false;
 		}
 		return true;
